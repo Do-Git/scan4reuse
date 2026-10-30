@@ -1,3 +1,6 @@
+import { browserPreview, configurePreview, listPreviewFiles, addPreviewFile, previewDownloadUrl, deletePreviewFile } from './preview.js';
+
+configurePreview('upload');
 const $ = selector => document.querySelector(selector);
 const state = { files: [], queue: [], filter: 'all', query: '', sort: 'newest', view: 'grid', maxFileSize: 50 * 1024 * 1024, loaded: false, loadFailed: false };
 const input = $('#file-input');
@@ -45,6 +48,12 @@ function toast(message, error = false) {
 }
 
 async function api(url, options) {
+  if (browserPreview) {
+    if (url === '/api/files' && !options?.method) return listPreviewFiles();
+    const match = url.match(/^\/api\/files\/([^/]+)$/);
+    if (match && options?.method === 'DELETE') return deletePreviewFile(match[1]);
+    throw new Error('Questa operazione non è disponibile nell’anteprima.');
+  }
   const response = await fetch(url, options);
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || 'La richiesta non è riuscita. Riprova.');
@@ -74,7 +83,7 @@ function renderFiles() {
   $('#nav-count').textContent = total;
   $('#file-count').textContent = total;
   $('#storage-summary').textContent = `${total} file · ${bytes(state.files.reduce((sum, file) => sum + file.size, 0))} utilizzati`;
-  $('#archive-status').textContent = state.loadFailed ? 'Archivio non raggiungibile' : total ? 'Tutti i file salvati sul server' : 'Pronto per il tuo primo file';
+  $('#archive-status').textContent = state.loadFailed ? 'Archivio non raggiungibile' : total ? (browserPreview ? 'File in memoria in questo browser' : 'Tutti i file salvati sul server') : 'Pronto per il tuo primo file';
   $('#empty-state').hidden = state.loadFailed || !state.loaded || total > 0;
   $('#load-error').hidden = !state.loadFailed;
   const filtered = state.files.filter(file => (state.filter === 'all' || category(file) === state.filter) && file.name.toLocaleLowerCase('it').includes(state.query.toLocaleLowerCase('it')));
@@ -102,7 +111,7 @@ function fileCard(file) {
   details.append(name, meta);
   const actions = element('div', 'file-actions');
   const download = element('a', 'icon-button');
-  download.href = `/api/files/${file.id}/download`;
+  download.href = browserPreview ? previewDownloadUrl(file.id) : `/api/files/${file.id}/download`;
   download.setAttribute('download', file.name);
   download.setAttribute('aria-label', `Scarica ${file.name}`);
   download.title = 'Scarica file';
@@ -207,6 +216,13 @@ function pumpQueue() {
 function upload(item) {
   item.status = 'uploading';
   renderQueue();
+  if (browserPreview) {
+    addPreviewFile(item.file).then(file => {
+      if (item.status !== 'uploading') { deletePreviewFile(file.id); return; }
+      finishUpload(item, 'done', '', file);
+    }).catch(error => finishUpload(item, 'error', error.message));
+    return;
+  }
   const xhr = new XMLHttpRequest();
   item.xhr = xhr;
   xhr.open('POST', '/api/files');
@@ -221,23 +237,7 @@ function upload(item) {
       if (item.statusNode) item.statusNode.textContent = queueStatus(item);
     }
   });
-  const finish = (status, error = '', file) => {
-    if (item.status !== 'uploading') return;
-    item.status = status;
-    item.error = error;
-    item.xhr = null;
-    if (status === 'done') {
-      item.file = null;
-      state.files = [file, ...state.files.filter(existing => existing.id !== file.id)];
-      state.loaded = true;
-      state.loadFailed = false;
-      $('#loading-state').hidden = true;
-      renderFiles();
-      toast(`“${file.name}” è nel tuo archivio.`);
-    } else if (status === 'cancelled') { item.file = null; loadFiles(); }
-    renderQueue();
-    pumpQueue();
-  };
+  const finish = (status, error = '', file) => finishUpload(item, status, error, file);
   xhr.addEventListener('load', () => {
     let data;
     try { data = JSON.parse(xhr.responseText); }
@@ -249,6 +249,24 @@ function upload(item) {
   xhr.addEventListener('timeout', () => finish('error', 'Il server impiega troppo tempo. Riprova.'));
   xhr.addEventListener('abort', () => finish('cancelled'));
   xhr.send(item.file);
+}
+
+function finishUpload(item, status, error = '', file) {
+    if (item.status !== 'uploading') return;
+    item.status = status;
+    item.error = error;
+    item.xhr = null;
+    if (status === 'done') {
+      item.file = null;
+      state.files = [file, ...state.files.filter(existing => existing.id !== file.id)];
+      state.loaded = true;
+      state.loadFailed = false;
+      $('#loading-state').hidden = true;
+      renderFiles();
+      toast(browserPreview ? `“${file.name}” è pronto in questa anteprima.` : `“${file.name}” è nel tuo archivio.`);
+    } else if (status === 'cancelled') { item.file = null; loadFiles(); }
+    renderQueue();
+    pumpQueue();
 }
 
 for (const id of ['top-upload', 'sidebar-upload', 'browse-files', 'empty-upload']) {

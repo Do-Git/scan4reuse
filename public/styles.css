@@ -159,3 +159,379 @@ fieldset { margin: 0; padding: 0; border: 0; }legend { padding: 0; margin-bottom
 }
 @media (prefers-reduced-motion: reduce) { :root { scroll-behavior: auto; }*,*:before,*:after { transition: none !important; animation: none !important; } }
 .hero-annotation .annotation-arrow .icon { width: 28px; height: 28px; }
+
+/* Startup website: logistics first, with the deck content supporting the story. */
+:root {
+  --paper: #fbfcf8;
+  --ink: #213e2d;
+  --muted: #748071;
+  --soft: #eff5eb;
+  --line: #e0e7da;
+  background: var(--paper);
+}
+body { background: var(--paper); }
+.site-header { min-height: 91px; }
+.brand { font-size: 23px; letter-spacing: -1.3px; }
+.brand-icon { width: 23px; height: 23px; font-size: 25px; }
+.header-cta { border: 1px solid #cddbc4; background: transparent; border-radius: 7px; }
+.button { border-radius: 7px; font-weight: 600; }
+.button-dark { background: #214c37; }
+.button-dark:hover { background: #326347; }
+.button-outline { border-color: #b6c9a9; }
+.button-outline:hover { background: #eaf2e2; }
+.hero-shell { background: radial-gradient(ellipse at 83% 38%, #eaf3e7, transparent 50%), var(--paper); overflow: hidden; }
+.hero { grid-template-columns: 1fr 1fr; gap: 73px; padding-block: 56px 53px; align-items: center; }
+.hero .eyebrow { color: #7b9269; font-size: 9px; letter-spacing: 1.35px; margin-bottom: 24px; }
+.hero h1 { font-size: clamp(54px, 5.5vw, 78px); line-height: 1.04; letter-spacing: -4.3px; font-weight: 500; white-space: normal; }
+.hero h1>span.hero-highlight { color: #759662; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-style: italic; letter-spacing: -3.7px; }
+.hero-copy>p:not(.hero-tagline) { font-size: 14px; color: var(--muted); line-height: 1.9; margin: 25px 0 26px; max-width: 413px; }
+.hero-actions { gap: 25px; }
+.hero-actions .button { padding: 15px 20px; font-size: 12px; }
+.hero-actions .plain-link { color: #536f42; font-size: 11px; font-weight: 500; }
+.hero-origin { display: flex; align-items: center; gap: 12px; margin-top: 29px; }
+.hero-origin>span { display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid #d8e5cc; border-radius: 50%; color: #8ca874; }
+.hero-origin .icon { width: 18px; height: 18px; }
+.hero-origin p { font-size: 9px; color: #8c9b7f; line-height: 1.8; margin: 0; }
+.hero-origin strong { font-weight: 500; color: #6f895b; }
+.hero-shipment { min-width: 0; padding: 24px; background: #fffffc; border: 1px solid #dce6d4; border-radius: 15px; box-shadow: 0 19px 45px #3856330b; transform: rotate(1deg); }
+.shipment-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #e4eade; padding-bottom: 19px; }
+.shipment-top>span:first-child { display: flex; align-items: center; gap: 7px; font-size: 7px; letter-spacing: .7px; font-weight: 600; color: #879b76; }
+.shipment-top i { display: inline-block; width: 5px; height: 5px; background: #94b470; border-radius: 50%; }
+.shipment-label { font-size: 8px; border: 1px solid #dce8cf; color: #7f9868; padding: 5px 7px; border-radius: 5px; background: #f2f7e9; white-space: nowrap; }
+.shipment-object { display: flex; align-items: center; gap: 16px; padding-block: 22px; }
+.window-illustration { flex-shrink: 0; width: 70px; height: 79px; display: grid; place-items: center; color: #94aa7e; background: #f0f5e9; border: 1px solid #e6ecdc; border-radius: 9px; }
+.window-illustration svg { width: 50px; height: 59px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.shipment-object>div:last-child { min-width: 0; }
+.shipment-object>div>span { color: #91a17f; font-size: 7px; font-weight: 500; letter-spacing: .7px; }
+.shipment-object h2 { font-size: 19px; font-weight: 550; line-height: 1.3; letter-spacing: -.6px; margin: 8px 0 5px; }
+.shipment-object p { color: #8b9d7b; font-size: 10px; line-height: 1.8; margin: 0; }
+.shipment-object p>span { margin: 0 6px; color: #b0bca4; }
+.shipment-journey { padding-left: 30px; margin: 3px 0 21px; position: relative; }
+.shipment-journey:before { content: ''; position: absolute; left: 5px; top: 8px; bottom: 11px; border-left: 1px dashed #c6d6b4; }
+.shipment-journey>div { position: relative; }
+.shipment-pin { position: absolute; left: -30px; top: 1px; width: 12px; height: 12px; border: 2px solid #b3c998; border-radius: 50%; background: #fffffc; }
+.shipment-pin.destination { background: #86aa62; border-color: #86aa62; }
+.shipment-journey small { display: block; font-size: 7px; color: #9aa88a; letter-spacing: .7px; margin-bottom: 6px; }
+.shipment-journey strong { font-size: 13px; font-weight: 500; color: #526d40; }
+.shipment-connection { display: flex; align-items: center; gap: 11px; padding-block: 21px; color: #9eb48b; }
+.shipment-connection>span { font-size: 6px; letter-spacing: .7px; }
+.shipment-connection .icon { width: 22px; height: 22px; }
+.shipment-needs { display: flex; flex-wrap: wrap; gap: 7px; padding-bottom: 19px; }
+.shipment-needs>span { display: flex; align-items: center; gap: 5px; border: 1px solid #e0e9d6; border-radius: 5px; background: #f3f7ed; padding: 6px 7px; color: #869d72; font-size: 8px; }
+.shipment-needs .icon { width: 13px; height: 13px; }
+.shipment-bottom { border-top: 1px solid #e2eadd; padding-top: 19px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.shipment-bottom>span { font-size: 8px; color: #8e9f7e; line-height: 1.8; }
+.shipment-bottom b { font-weight: 400; margin: 0 5px; }
+.shipment-bottom .button { font-size: 9px; gap: 9px; padding: 10px 11px; white-space: nowrap; }
+.shipment-bottom .button .icon { width: 14px; height: 14px; }
+.journey-strip { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 25px 0 29px; border-top: 1px solid #e5ebde; }
+.journey-strip>span:first-child { color: #9aa68e; font-size: 7px; letter-spacing: 1px; max-width: 160px; line-height: 1.8; }
+.journey-strip>div { display: flex; align-items: center; gap: 9px; font-size: 12px; color: #708b5c; }
+.journey-strip .icon { width: 18px; height: 18px; color: #90a97b; }
+.strip-connector { color: #c0cdb4; font-size: 14px; }
+.section { padding-block: 74px; }
+h2 { font-weight: 500; line-height: 1.1; letter-spacing: -1.8px; }
+h2 em, h3 em { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; color: #789763; }
+.section-heading>p { font-size: 13px; color: #7c8972; }
+.section-heading .eyebrow { color: #8ba274; font-size: 8px; letter-spacing: 1.2px; }
+.steps-grid { gap: 19px; }
+.step-card { border-radius: 11px; background: #f0f4e9; border-color: #e3eadc; }
+.step-card h3 { font-size: 24px; letter-spacing: -.7px; font-weight: 500; line-height: 1.2; }
+.step-card p { color: #819074; font-size: 12px; }
+.step-top { color: #8fa67b; font-weight: 500; }
+.step-top .icon { color: #86a36f; }
+.step-card .text-link { font-size: 10px; color: #67834e; }
+.featured-step { background: #244b37; border-color: #244b37; }
+.featured-step p { color: #bbceb1; }
+.featured-step .step-top, .featured-step .step-top .icon, .featured-step .text-link { color: #c3dfa3; }
+.logistics-section { background: #244b37; padding-block: 68px; }
+.logistics-inner h2 { text-transform: none; font-weight: 450; }
+.logistics-inner h2 em { color: #c3df9f; }
+.logistics-inner .eyebrow { color: #c0d99f; }
+.logistics-inner>div>p { color: #bed1b6; }
+.feature-list { color: #d2dfc9; }
+.feature-list .icon { color: #bddb98; }
+.logistics-inner .button-lime { border-radius: 7px; background: #d8ebaa; color: #36542b; }
+.route-board { border-radius: 12px; background: #fbfdf4; box-shadow: 0 20px 45px #0b261821; transform: rotate(1deg); }
+.delivery-section { background: #edf3e6; border-color: #e3ead9; }
+.delivery-intro h2 { text-transform: none; font-weight: 450; line-height: 1.09; }
+.delivery-intro .eyebrow { color: #809b68; }
+.delivery-planner { border-radius: 12px; border-color: #dce6d2; background: #fffffa; box-shadow: 0 8px 25px #44633705; }
+.form-progress .current>span { background: #345b3b; color: #eff7de; border-color: #345b3b; border-radius: 50%; }
+.form-progress li>span { border-radius: 50%; }
+legend { font-weight: 500; letter-spacing: -.7px; }
+input, select, textarea { border-radius: 5px; border-color: #dae5d0; background: #fffffc; }
+.use-example { border-radius: 6px; background: #f0f6e6; color: #75975a; border-color: #d2e0be; }
+.conditional-fields, .brief-preview, .success-summary { border-radius: 7px; background: #f1f6e9; border-color: #e0e9d3; }
+.product-showcase { grid-template-columns: 1fr 1fr; gap: 22px; }
+.showcase-card { border-radius: 12px; border-color: #e0e7d8; background: #f1f5ec; padding: 30px; }
+.workflow-card { grid-column: auto; display: block; }
+.marketplace-showcase { background: #f5f0e7; }
+.showcase-card h3 { font-size: 35px; line-height: 1.08; font-weight: 450; letter-spacing: -1.3px; }
+.showcase-card p { color: #7c8d70; font-size: 12px; }
+.product-label { color: #8a9f76; font-size: 8px; font-weight: 500; }
+.showcase-card>img { margin-top: 25px; border-radius: 8px; background: white; }
+.workflow-card>.concept-label { margin-top: 22px; }
+.marketplace-showcase>img { max-height: none; }
+.report-card { grid-column: 1/-1; display: grid; grid-template-columns: 1fr 260px; gap: 25px 50px; align-items: center; background: #f7f9f2; }
+.report-image { padding: 12px; background: #e8efdf; border-radius: 9px; height: 260px; max-height: none; margin: 0; overflow: hidden; }
+.report-image img { width: 100%; height: 100%; object-fit: contain; background: white; }
+.report-card>.concept-label { grid-column: 1/-1; margin-top: 0; }
+.impact-section { background: #f0f4e9; }
+.purpose-grid { border-color: #d9e3cd; }
+.purpose-grid h3 { font-weight: 450; font-size: 25px; }
+.purpose-grid p { color: #7f9270; }
+.deck-context { border: 1px solid #d7e3c9; border-radius: 8px; background: #f7faf1; margin: 25px 0 0; }
+.deck-context summary { list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 15px; color: #67814f; font-size: 12px; }
+.deck-context summary::-webkit-details-marker, .discovery-note summary::-webkit-details-marker { display: none; }
+.deck-context summary>span { display: flex; align-items: center; gap: 10px; }
+.deck-context summary .icon { width: 17px; height: 17px; }
+.deck-context[open] summary>.icon { transform: rotate(45deg); }
+.deck-context>div { padding: 0 18px 6px; max-width: 1020px; }
+.deck-context p { color: #7c9070; font-size: 11px; line-height: 1.9; }
+.esg-header h3 { font-weight: 500; }
+.esg-header>span { color: #8aa177; }
+.esg-grid>article+article { border-color: #d6e3c7; }
+.esg-grid h4 { font-weight: 500; }
+.esg-grid p, .esg-grid .esg-goal { color: #809773; }
+.esg-icon { color: #809e65; }
+.esg-icon>span { border-radius: 50%; border-color: #ccddbb; }
+.goal-label { color: #708e56; }
+.sdg-tag, .sdg-row>div { border-radius: 5px; border-color: #d2dfc3; color: #80976d; }
+.sdg-row { border-color: #d9e3cf; }
+.story-row h2 { font-weight: 450; }
+.story-copy p { color: #7a8972; }
+.discovery-note { border-top: 1px solid #e1e8d9; padding-top: 13px; margin-top: 18px; }
+.discovery-note summary { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; list-style: none; color: #7a9564; font-size: 10px; line-height: 1.7; }
+.discovery-note summary .icon { width: 14px; height: 14px; }
+.discovery-note p { font-size: 11px; margin-top: 14px; }
+.discovery-note blockquote { color: #607c4c; font-size: 14px; line-height: 1.8; margin: 18px 0 10px; }
+.discovery-note small { font-size: 9px; color: #96a687; line-height: 1.8; }
+.team-portrait { border-radius: 9px; }
+.team-portrait>span { background: #e8f2daca; color: #63814c; border-radius: 50%; width: 25px; height: 25px; padding: 0; display: grid; place-items: center; font-size: 8px; }
+.team-card h3 { font-weight: 500; }
+.team-role { color: #7c9867; }
+.roadmap-section { padding-top: 0; }
+.roadmap-grid { border-radius: 10px; overflow: hidden; border-color: #e2e9da; }
+.roadmap-grid li { background: #f4f7ee; border-color: #e1e8d8; }
+.roadmap-grid h3 { font-size: 21px; font-weight: 500; letter-spacing: -.7px; line-height: 1.2; }
+.closing-note p { font-size: 32px; font-weight: 450; line-height: 1.2; }
+.closing-note em { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; color: #7f9c68; }
+.round-arrow { border-radius: 50%; background: #315d3f; color: #dceab6; }
+.footer-links .footer-contact { font-size: 24px; font-weight: 450; line-height: 1.25; letter-spacing: -.7px; }
+.modal { border-radius: 14px; box-shadow: 0 25px 90px #18322138; background: var(--paper); }
+.modal::backdrop { background: #1c34265e; }
+.modal h2 { font-weight: 450; line-height: 1.1; }
+.modal h2 em { color: #769661; }
+.icon-button { border-radius: 50%; }
+.full-report, .workflow-preview, .demo-listing>img { border-radius: 7px; }
+.pricing-intro { padding-block: 58px 45px; }
+.pricing-intro h1 { font-size: 61px; font-weight: 450; line-height: 1.07; letter-spacing: -3px; }
+.pricing-intro h1 em { font-family: Georgia, 'Times New Roman', serif; color: #799963; font-style: italic; font-weight: 400; }
+.pricing-intro>p { color: #839475; }
+.price-card { border-radius: 11px; background: #f8faf4; border-color: #e0e9d7; }
+.popular-plan { background: #eaf1dd; border-color: #c9dca8; }
+.popular-plan .plan-icon { background: #d8e8bf; color: #6b8b4c; border-radius: 8px; }
+.price-card .plan-icon { border-radius: 8px; }
+.price-card h2 { font-size: 29px; font-weight: 450; letter-spacing: -.9px; line-height: 1.08; }
+.price-card h2 em { font-family: inherit; font-style: normal; font-weight: inherit; color: inherit; }
+.popular-plan .small-label { color: #78965b; }
+.popular-plan>p, .popular-plan li { color: #789066; }
+.popular-plan .billing-description, .popular-plan .plan-includes { color: #88a074; }
+.popular-plan .plan-includes { border-color: #d1dfbf; }
+.popular-plan li .icon { color: #7fa65a; }
+.price>strong { font-weight: 500; }
+.custom-price>strong { font-size: 35px; letter-spacing: -1.3px; }
+.plan-includes { color: #81996e; }
+.pricing-fineprint p { color: #94a586; }
+.estimate-card { border-radius: 10px; background: #f1f5e9; border-color: #dce7d0; }
+.estimate-card h3 { font-weight: 500; }
+.estimate-result output { font-weight: 500; color: #63854a; }
+.faq-section h2 { font-weight: 450; }
+.faq-list summary { font-weight: 500; color: #67834f; }
+.pricing-cta { background: #eaf1dc; border-radius: 12px; border: 1px solid #dae5c9; }
+.pricing-cta h2 { font-weight: 450; }
+.pricing-cta h2 em { color: #78965f; }
+
+@media (min-width: 1500px) {
+  .hero { padding-block: 65px; gap: 90px; }
+  .hero h1 { font-size: 82px; }
+}
+@media (max-width: 1180px) {
+  .hero { gap: 42px; padding-block: 44px 48px; }
+  .hero h1 { font-size: 66px; letter-spacing: -3.7px; }
+  .hero h1>span.hero-highlight { letter-spacing: -3px; }
+  .hero-copy>p:not(.hero-tagline) { font-size: 13px; }
+  .hero-actions { gap: 20px; }
+  .hero-actions .button { font-size: 11px; padding: 14px 16px; }
+  .hero-actions .plain-link { font-size: 10px; }
+  .hero-shipment { padding: 22px; }
+  .shipment-object { gap: 12px; }
+  .shipment-object h2 { font-size: 17px; }
+  .shipment-top>span:first-child { font-size: 6px; }
+  .shipment-bottom { gap: 9px; }
+  .shipment-bottom>span { font-size: 7px; }
+  .shipment-bottom .button { font-size: 8px; padding: 10px; gap: 6px; }
+  .step-card h3 { font-size: 22px; }
+  .showcase-card h3 { font-size: 32px; }
+  .report-card { grid-template-columns: 1fr 230px; gap: 25px 35px; }
+}
+@media (max-width: 960px) {
+  .hero { gap: 32px; grid-template-columns: .95fr 1.05fr; }
+  .hero h1 { font-size: 54px; letter-spacing: -3px; }
+  .hero h1>span.hero-highlight { letter-spacing: -2.5px; }
+  .hero .eyebrow { font-size: 7px; letter-spacing: .9px; margin-bottom: 23px; }
+  .hero-copy>p:not(.hero-tagline) { font-size: 12px; line-height: 1.85; }
+  .hero-actions { gap: 16px; }
+  .hero-actions .button { font-size: 10px; gap: 9px; padding: 12px; }
+  .hero-actions .plain-link { font-size: 9px; }
+  .hero-origin p { font-size: 8px; }
+  .hero-origin>span { width: 30px; height: 30px; }
+  .hero-shipment { padding: 20px; }
+  .shipment-top { gap: 8px; padding-bottom: 16px; }
+  .shipment-top>span:first-child { font-size: 5px; letter-spacing: .4px; }
+  .shipment-label { font-size: 6px; padding: 4px 5px; }
+  .window-illustration { width: 54px; height: 65px; }
+  .window-illustration svg { width: 39px; height: 48px; }
+  .shipment-object { gap: 10px; padding-block: 18px; }
+  .shipment-object h2 { font-size: 15px; }
+  .shipment-object>div>span { font-size: 6px; }
+  .shipment-object p { font-size: 8px; }
+  .shipment-object p>span { margin-inline: 3px; }
+  .shipment-journey strong { font-size: 12px; }
+  .shipment-journey small { font-size: 6px; }
+  .shipment-connection>span { font-size: 5px; }
+  .shipment-needs { gap: 5px; padding-bottom: 16px; }
+  .shipment-needs>span { font-size: 6px; gap: 4px; padding: 6px; }
+  .shipment-needs .icon { width: 11px; height: 11px; }
+  .shipment-bottom { flex-wrap: wrap; gap: 12px; padding-top: 16px; }
+  .shipment-bottom>span { font-size: 7px; }
+  .shipment-bottom .button { margin-left: auto; font-size: 8px; }
+  .journey-strip { gap: 15px; padding-block: 23px; }
+  .journey-strip>span:first-child { font-size: 6px; max-width: 125px; }
+  .journey-strip>div { font-size: 10px; gap: 7px; }
+  .journey-strip .icon { width: 16px; height: 16px; }
+  .strip-connector { font-size: 12px; }
+  .section { padding-block: 64px; }
+  .step-card h3 { font-size: 20px; }
+  .step-card p { font-size: 10px; }
+  .step-card .text-link { font-size: 9px; }
+  .logistics-inner h2 { font-size: 36px; }
+  .delivery-intro h2 { font-size: 39px; }
+  .showcase-card { padding: 25px; }
+  .showcase-card h3 { font-size: 29px; }
+  .showcase-card p { font-size: 11px; }
+  .report-card { grid-template-columns: 1fr 190px; gap: 23px; }
+  .report-image { height: 230px; }
+  .purpose-grid h3 { font-size: 23px; }
+  .team-card h3 { font-size: 13px; }
+  .roadmap-section { padding-top: 0; }
+  .roadmap-grid h3 { font-size: 20px; }
+  .pricing-intro h1 { font-size: 53px; letter-spacing: -2.8px; }
+  .price-card h2 { font-size: 25px; }
+  .custom-price>strong { font-size: 31px; }
+}
+@media (max-width: 720px) {
+  .site-header { min-height: 78px; }
+  .brand { font-size: 22px; }
+  .mobile-menu { border-radius: 9px; box-shadow: 0 10px 30px #35543116; border-color: #d8e3cb; }
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 32px 39px; }
+  .hero .eyebrow { font-size: 7px; letter-spacing: 1.1px; margin-bottom: 21px; }
+  .hero h1 { font-size: clamp(48px, 10.2vw, 64px); line-height: 1.055; letter-spacing: -2.8px; }
+  .hero h1>span.hero-highlight { letter-spacing: -2.3px; }
+  .hero-copy>p:not(.hero-tagline) { font-size: 12px; max-width: 400px; line-height: 1.9; margin: 25px 0 23px; }
+  .hero-actions { gap: 22px; }
+  .hero-actions .button { font-size: 11px; padding: 14px 17px; gap: 14px; }
+  .hero-actions .plain-link { font-size: 10px; }
+  .hero-origin { margin-top: 23px; }
+  .hero-origin p { font-size: 8px; }
+  .hero-shipment { padding: 23px; transform: rotate(.5deg); }
+  .shipment-top { padding-bottom: 17px; gap: 10px; }
+  .shipment-top>span:first-child { font-size: 6px; letter-spacing: .5px; }
+  .shipment-label { font-size: 7px; padding: 5px 6px; }
+  .shipment-object { gap: 13px; padding-block: 21px; }
+  .window-illustration { width: 60px; height: 72px; }
+  .window-illustration svg { width: 43px; height: 52px; }
+  .shipment-object>div>span { font-size: 6px; }
+  .shipment-object h2 { font-size: 17px; margin-top: 7px; }
+  .shipment-object p { font-size: 9px; }
+  .shipment-journey { padding-left: 28px; }
+  .shipment-pin { left: -28px; }
+  .shipment-journey small { font-size: 6px; }
+  .shipment-journey strong { font-size: 13px; }
+  .shipment-connection { padding-block: 19px; }
+  .shipment-connection>span { font-size: 5px; }
+  .shipment-needs>span { font-size: 7px; padding: 6px 7px; }
+  .shipment-needs .icon { width: 12px; height: 12px; }
+  .shipment-bottom { gap: 12px; }
+  .shipment-bottom>span { font-size: 7px; }
+  .shipment-bottom .button { font-size: 9px; padding: 11px; gap: 8px; }
+  .journey-strip { flex-wrap: wrap; justify-content: flex-start; column-gap: 13px; row-gap: 16px; padding-block: 22px; }
+  .journey-strip>span:first-child { max-width: 100%; width: 100%; font-size: 6px; }
+  .journey-strip>div { font-size: 9px; gap: 6px; }
+  .journey-strip .icon { width: 15px; height: 15px; }
+  .strip-connector { font-size: 11px; }
+  .section { padding-block: 53px; }
+  h2 { font-size: 35px; }
+  .section-heading>p { font-size: 12px; }
+  .section-heading .eyebrow { font-size: 7px; }
+  .step-card { padding: 27px; }
+  .step-card h3 { font-size: 25px; }
+  .step-card p { font-size: 12px; }
+  .step-card .text-link { font-size: 10px; }
+  .logistics-section { padding-block: 53px; }
+  .logistics-inner h2 { font-size: 39px; }
+  .delivery-intro h2 { font-size: 43px; }
+  .product-showcase { grid-template-columns: 1fr; }
+  .showcase-card { padding: 27px; }
+  .showcase-card h3 { font-size: 32px; }
+  .showcase-card p { font-size: 12px; }
+  .report-card { grid-column: auto; display: block; }
+  .report-image { margin-top: 25px; height: 275px; }
+  .report-card>.concept-label { margin-top: 21px; }
+  .purpose-grid h3 { font-size: 25px; }
+  .deck-context summary { font-size: 11px; padding: 15px; }
+  .deck-context>div { padding-inline: 15px; }
+  .deck-context p { font-size: 11px; }
+  .discovery-note summary { font-size: 10px; }
+  .discovery-note p { font-size: 11px; }
+  .team-card h3 { font-size: 16px; }
+  .team-role { font-size: 10px; }
+  .roadmap-section { padding-top: 0; }
+  .roadmap-grid h3 { font-size: 24px; }
+  .closing-note p { font-size: 26px; }
+  .pricing-intro { padding-block: 37px 34px; }
+  .pricing-intro h1 { font-size: 42px; letter-spacing: -2.2px; }
+  .pricing-intro .eyebrow { font-size: 7px; }
+  .price-card h2 { font-size: 30px; }
+  .custom-price>strong { font-size: 38px; }
+  .pricing-cta h2 { font-size: 34px; }
+  .footer-links .footer-contact { font-size: 25px; }
+}
+@media (max-width: 370px) {
+  .hero h1 { font-size: 46px; letter-spacing: -2.5px; }
+  .hero h1>span.hero-highlight { letter-spacing: -2px; }
+  .hero .eyebrow { font-size: 6px; }
+  .hero-actions { gap: 16px; }
+  .hero-actions .button { font-size: 10px; padding-inline: 14px; }
+  .hero-actions .plain-link { font-size: 9px; }
+  .hero-shipment { padding: 19px; }
+  .shipment-top>span:first-child { font-size: 5px; }
+  .shipment-label { font-size: 6px; }
+  .shipment-object { gap: 10px; }
+  .shipment-object h2 { font-size: 15px; }
+  .window-illustration { width: 53px; height: 65px; }
+  .shipment-needs>span { font-size: 6px; }
+  .shipment-bottom>span { font-size: 7px; }
+  .shipment-bottom .button { font-size: 8px; }
+  .journey-strip { gap: 13px 9px; }
+  .journey-strip>div { font-size: 8px; gap: 5px; }
+  .journey-strip .icon { width: 13px; height: 13px; }
+  .strip-connector { font-size: 10px; }
+  h2 { font-size: 31px; }
+  .team-card h3 { font-size: 14px; }
+  .team-role { font-size: 9px; }
+  .pricing-intro h1 { font-size: 36px; }
+  .closing-note p { font-size: 23px; }
+}
+.preview-notice { padding: 10px 22px; text-align: center; color: #466b41; background: #edf5e5; border-bottom: 1px solid #d9e7cc; font-size: 11px; line-height: 1.7; }

@@ -1,3 +1,6 @@
+import { browserPreview, configurePreview, preparePreviewBrief } from './preview.js';
+
+configurePreview('site');
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const menu = $('#mobile-menu');
@@ -63,6 +66,8 @@ function fillExample() {
   if (form.hidden) resetPlanner();
   const example = { listingId: 'demo-window', itemName: 'Reclaimed window frame', category: 'building-materials', quantity: 1, length: 12, width: 100, height: 140, weight: 18 };
   for (const [name, value] of Object.entries(example)) form.elements.namedItem(name).value = value;
+  form.elements.namedItem('fragile').checked = true;
+  form.elements.namedItem('packaging').checked = true;
   updateCategory();
   goToStep(0);
   form.elements.namedItem('itemName').focus({ preventScroll: true });
@@ -73,6 +78,11 @@ $('#use-demo-listing').addEventListener('click', () => {
   fillExample();
   if (form) $('#delivery').scrollIntoView({ behavior: 'smooth' });
 });
+
+$$('[data-use-example]').forEach(button => button.addEventListener('click', () => {
+  fillExample();
+  if (form) $('#delivery').scrollIntoView({ behavior: 'smooth' });
+}));
 
 function node(tag, text) {
   const result = document.createElement(tag);
@@ -198,12 +208,16 @@ if (form) {
     if (step < 2) { goToStep(step + 1, true); return; }
     const button = $('#form-submit');
     button.disabled = true;
-    button.firstChild.textContent = 'Saving your brief… ';
+    button.firstChild.textContent = browserPreview ? 'Preparing your brief… ' : 'Saving your brief… ';
     $('#form-error').hidden = true;
     try {
-      const response = await fetch('/api/delivery-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values()) });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Your brief could not be saved. Please try again.');
+      let data;
+      if (browserPreview) data = { request: await preparePreviewBrief(values()) };
+      else {
+        const response = await fetch('/api/delivery-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values()) });
+        data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Your brief could not be saved. Please try again.');
+      }
       savedBrief = data.request;
       $('#request-reference').textContent = savedBrief.reference;
       renderBrief($('#success-summary'), savedBrief);
@@ -217,7 +231,7 @@ if (form) {
       $('#form-error').hidden = false;
     } finally {
       button.disabled = false;
-      button.firstChild.textContent = 'Save my delivery brief ';
+      button.firstChild.textContent = browserPreview ? 'Prepare my delivery brief ' : 'Save my delivery brief ';
     }
   });
 

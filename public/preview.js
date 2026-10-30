@@ -1,0 +1,91 @@
+// Public previews use browser memory, keeping development data off the deployment.
+export const browserPreview = document.documentElement.dataset.storage === 'browser';
+const files = new Map();
+const MAX_FILE_SIZE = 50 * 1024 * 1024;
+const MAX_SESSION_SIZE = 200 * 1024 * 1024;
+
+export function configurePreview(page) {
+  if (!browserPreview) return;
+  const note = document.createElement('aside');
+  note.className = 'preview-notice';
+  note.setAttribute('role', 'note');
+  note.textContent = page === 'upload'
+    ? 'Anteprima interattiva: i file restano in memoria nel browser e si svuotano al ricaricamento. Nessun file viene inviato al server.'
+    : 'Interactive preview · files and requests stay in this browser and clear on reload. No bookings or payments.';
+  document.body.prepend(note);
+
+  if (page === 'upload') {
+    const footnote = document.querySelector('.upload-footnote>span:first-child');
+    if (footnote) footnote.textContent = 'I file restano in questo browser · fino a 200 MB per sessione.';
+    const help = document.querySelector('.help-notice p');
+    if (help) help.textContent = 'Questa anteprima conserva i file soltanto in memoria nel tuo browser. Puoi caricarli, scaricarli ed eliminarli; al ricaricamento vengono rimossi. Limite totale: 200 MB per sessione.';
+    const saved = document.querySelector('.help-steps li:nth-child(2) p');
+    if (saved) saved.textContent = 'I file selezionati vengono letti in memoria nel tuo browser. In questa anteprima non vengono caricati su un server e non restano dopo il ricaricamento.';
+    const deletion = document.querySelector('#delete-dialog>p');
+    if (deletion?.lastChild) deletion.lastChild.textContent = ' verrà rimosso da questa anteprima.';
+    return;
+  }
+
+  const description = document.querySelector('.demo-note p');
+  if (description) description.textContent = 'Browser-only demo. Prepare and download a request to share with a partner. Nothing is sent to a carrier or stored on the server.';
+  const consent = document.querySelector('.consent-label>span');
+  if (consent) {
+    consent.replaceChildren(document.createTextNode('I understand this brief is prepared in my browser. No partner will be contacted automatically. '));
+    const info = document.createElement('button');
+    info.type = 'button';
+    info.className = 'inline-link';
+    info.dataset.open = 'privacy-dialog';
+    info.textContent = 'About your data';
+    consent.append(info);
+  }
+  const success = document.querySelector('.form-success>p');
+  if (success?.firstChild) success.firstChild.textContent = 'Prepared with reference ';
+  const button = document.querySelector('#form-submit');
+  if (button?.firstChild) button.firstChild.textContent = 'Prepare my delivery brief ';
+  const privacy = document.querySelectorAll('#privacy-dialog>p');
+  if (privacy[1]) privacy[1].textContent = 'In this public preview, delivery briefs are prepared only in browser memory and can be downloaded by you. No contact information is sent to the hosting platform or a carrier. No shipment is booked and no payment is taken.';
+  if (privacy[2]) privacy[2].textContent = 'The upload workspace in this preview also keeps files only in browser memory, up to 200 MB per session. Reloading or closing the page clears this demo state. No analytics or third-party tracking is used.';
+}
+
+export async function preparePreviewBrief(data) {
+  if (data.consent !== true) throw new Error('Your confirmation is required to prepare this demo brief.');
+  const id = crypto.randomUUID();
+  const record = { ...data, id, reference: `S4R-PREVIEW-${id.slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: 'browser_preview' };
+  for (const key of ['quantity', 'length', 'width', 'height', 'weight', 'pickupFloor', 'deliveryFloor']) {
+    if (record[key] !== undefined) record[key] = Number(record[key]);
+  }
+  if (record.service === 'doorstep') {
+    for (const key of ['pickupFloor', 'deliveryFloor', 'pickupLift', 'deliveryLift']) delete record[key];
+  }
+  if (record.category !== 'pallet') record.forklift = false;
+  return record;
+}
+
+export function listPreviewFiles() {
+  return { files: [...files.values()].map(entry => entry.metadata), maxFileSize: MAX_FILE_SIZE };
+}
+
+export async function addPreviewFile(file) {
+  if (!file || !file.size) throw new Error('Il file è vuoto. Scegli un altro file.');
+  if (file.size > MAX_FILE_SIZE) throw new Error('Il file supera il limite di 50 MB.');
+  const buffer = await file.arrayBuffer();
+  // Check after reading as well, so simultaneous files cannot exceed the limit.
+  const used = [...files.values()].reduce((sum, entry) => sum + entry.metadata.size, 0);
+  if (used + buffer.byteLength > MAX_SESSION_SIZE) throw new Error('Questa anteprima può conservare fino a 200 MB. Rimuovi un file e riprova.');
+  const metadata = { id: crypto.randomUUID(), name: file.name, size: file.size, type: file.type || 'application/octet-stream', createdAt: new Date().toISOString() };
+  const blob = new Blob([buffer], { type: 'application/octet-stream' });
+  files.set(metadata.id, { metadata, url: URL.createObjectURL(blob) });
+  return metadata;
+}
+
+export function previewDownloadUrl(id) {
+  return files.get(id)?.url || '';
+}
+
+export function deletePreviewFile(id) {
+  const entry = files.get(id);
+  if (!entry) throw new Error('Questo file non è più disponibile.');
+  URL.revokeObjectURL(entry.url);
+  files.delete(id);
+  return { deleted: id };
+}

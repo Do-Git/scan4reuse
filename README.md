@@ -1,6 +1,6 @@
 # Scan4Reuse
 
-An English-language startup site for circular construction and connected logistics, built with Node.js and plain HTML, CSS and JavaScript. No external packages, build step, API keys or third-party services are required.
+An English-language landing page for a circular-logistics startup, built with Node.js and plain HTML, CSS and JavaScript. The main journey connects buyers and logistics partners; the slide deck supplies the supporting scanning, marketplace, reporting and ESG content. No web framework or external application packages are used.
 
 ## Run
 
@@ -15,7 +15,7 @@ The server listens on `127.0.0.1:3000`. `npm run dev` enables automatic server r
 
 ## Pages
 
-- `/` — deck-branded landing page: material scanning, professional reuse reports, marketplace and connected delivery; target audiences; mission, vision and ESG ambitions; customer discovery; founding team and planned roadmap.
+- `/` — logistics-first startup landing page with the delivery planner near the core service; supporting iPhone, marketplace and report concepts; mission, vision, ESG, the five-person team and the Basel hackathon origin. Deck statistics and early interviews are integrated as expandable background context.
 - `/pricing` — the pitch-deck model: **CHF 5/m² for a professional reuse report** and **8% of total marketplace sales**, plus separately quoted logistics. Live calculators illustrate report costs, commissions and seller remainder. No subscription, payment or transaction is created.
 - `/upload` — the existing shared file-upload workspace, with uploads, search, filters, downloads and deletion. This earlier workspace currently uses Italian UI copy.
 
@@ -23,7 +23,7 @@ The origin story links to [Startup Weekend Basel](https://startupweekendbasel.ch
 
 ## Branding and content source
 
-The user-supplied **Scan4Resources.pdf** is the source for the emerald green (`#10bb82`), coral (`#ff4937`), black and white palette; bold uppercase typography; “Scan for reuse” and “Easy / Accessible / Seamless” messaging; building-material focus; app mockups; sample reuse report; pricing model; and planned roadmap.
+The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-material use case, app mockups, sample reuse report, pricing model and roadmap. These are integrated into the original logistics-startup concept, rather than presented as a sequence of pitch slides. The interface uses a calm green palette, clear service descriptions and a working delivery brief.
 
 Images in `public/assets/` are extracted from that deck. The five founder photographs are the original embedded photos, not AI-generated replacements. The unused generated artwork from the initial concept is not included in the site.
 
@@ -53,7 +53,7 @@ npm test
 
 The 12 integration tests use temporary directories and local HTTP servers. They cover upload/download integrity, persistence, deletion, size limits (including streamed requests), interrupted uploads, static pages and data protection, validated building-material delivery briefs, conditional requirements, consent and invalid/cross-site submissions.
 
-Browser validation uses Chromium to exercise report/commission calculators, invalid inputs and cent rounding, report previews, marketplace prefilling, adaptive delivery fields, failed-request recovery, brief export, FAQs, mobile navigation and layouts at 320–1440px. Verification screenshots are retained locally under `.local/verification/`, outside Git.
+Browser validation uses Chromium to exercise the Node application and the static preview: report/commission calculators, report previews, hero/marketplace prefilling, adaptive delivery fields, brief export, upload/download/deletion, mobile navigation and layouts at 320–1440px. The static preview was also checked to make no API requests while using its demo data. Verification screenshots are retained locally under `.local/verification/`, outside Git.
 
 ## Data and deployment
 
@@ -69,3 +69,11 @@ Use a single server instance per data directory. Preserve and back up the data d
 - `public/upload.html`, `public/upload.css`, `public/upload.js` — existing upload workspace.
 - `public/assets/`, `public/icons.svg` — deck images and locally served icons.
 - `test/server.test.mjs` — integration tests.
+
+## Browser preview and deployment
+
+Run `npm run build:preview` to generate `.local/preview/site` for Vercel or Netlify. The script copies only an explicit allowlist of public files; development uploads, saved contact data, environment files and the Git repository are excluded.
+
+The public preview keeps requests and files only in browser memory and clears them on reload. It supports the complete interactive site, brief downloads and file download/deletion without publishing the development archive. The Node application continues to use its persistent filesystem storage.
+
+Open the verified interactive preview at **https://scan4reuse-preview.vercel.app**. See [DEPLOYMENT.md](DEPLOYMENT.md) for the exact login, deployment and URL-opening steps. Building a preview does not publish the Codex environment.

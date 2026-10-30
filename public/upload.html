@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#174c3c">
+  <meta name="description" content="Il tuo spazio per caricare, organizzare e ritrovare i file. Semplice, con Scan4Reuse.">
+  <title>Il mio spazio · Scan4Reuse</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/upload.css">
+  <script src="/upload.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5m0 6v5h-5m-6 0H4v-5m5-3 2 2 4-4"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18H6a4 4 0 0 1-.8-7.9 7 7 0 0 1 13.6 0A4 4 0 0 1 18 18h-1M12 21V11m-3 3 3-3 3 3"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 13h8m-8 4h5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5Zm-9 5v9l9 5 9-5V8m-9 5v9M7.5 5.5l9 5"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 5h12M9 12h12M9 19h12M3 5h.01M3 12h.01M3 19h.01"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.01"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C7 2 1 8 5 15s17 4 15-12ZM4 21 15 10"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Vai al contenuto</a>
+  <aside class="sidebar" aria-label="Navigazione principale">
+    <a class="brand" href="/" aria-label="Scan4Reuse, pagina iniziale"><span class="brand-mark"><svg><use href="#i-scan"/></svg></span><span>scan<span class="brand-four">4</span>reuse<span class="brand-dot">.</span></span></a>
+    <div class="workspace-label">IL TUO WORKSPACE</div>
+    <nav class="main-nav">
+      <a class="nav-item active" href="#main" aria-current="page"><svg><use href="#i-grid"/></svg><span>Il mio spazio</span><span class="nav-count" id="nav-count">0</span></a>
+      <button class="nav-item" id="sidebar-upload" type="button"><svg><use href="#i-upload"/></svg><span>Carica file</span></button>
+    </nav>
+    <div class="sidebar-note"><span class="note-icon"><svg><use href="#i-leaf"/></svg></span><h2>Meno caos.<br>Più possibilità.</h2><p>Dai ai tuoi file un posto<br>da cui ricominciare.</p><span class="note-line" aria-hidden="true"></span></div>
+    <div class="sidebar-bottom"><button class="nav-item" id="help-button" type="button"><svg><use href="#i-info"/></svg><span>Come funziona</span><svg class="help-arrow"><use href="#i-arrow"/></svg></button><div class="space-profile"><span class="avatar">S</span><div><strong>Spazio personale</strong><span>Il tuo archivio digitale</span></div><span class="online-dot" aria-label="Archiviazione sul server"></span></div></div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumbs"><svg><use href="#i-folder"/></svg><span>Workspace</span><span class="breadcrumb-divider">/</span><strong>Il mio spazio</strong></div><div class="topbar-status"><span></span>Uno spazio, tutti i tuoi file</div></header>
+    <main id="main" tabindex="-1">
+      <section class="page-intro" aria-labelledby="page-title"><div><div class="eyebrow"><span></span>SEMPLICE. ORDINATO. TUO.</div><h1 id="page-title">Fai spazio alle <span>possibilità.</span></h1><p>Carica i tuoi file. Ritrovali quando servono. Tutto qui.</p></div><button class="button button-primary intro-upload" id="top-upload" type="button"><svg><use href="#i-plus"/></svg>Carica file</button></section>
+
+      <section class="upload-section" aria-label="Caricamento file">
+        <div class="drop-zone" id="drop-zone">
+          <div class="upload-decoration decoration-left" aria-hidden="true"><span class="deco-dot"></span><div class="paper paper-back"><svg><use href="#i-image"/></svg><span></span><span></span></div><div class="paper paper-front"><svg><use href="#i-file"/></svg><span></span><span></span></div><svg class="deco-spark"><use href="#i-spark"/></svg></div>
+          <div class="drop-content"><span class="upload-icon"><svg><use href="#i-cloud"/></svg></span><h2>Un file. Un nuovo inizio.</h2><p>Trascina qui i tuoi file oppure <button class="text-button" id="browse-files" type="button">scegli dal dispositivo<svg><use href="#i-arrow"/></svg></button></p><div class="upload-hints"><span>Immagini, documenti e molto altro</span><span class="hint-separator">·</span><span id="size-hint">Fino a 50 MB per file</span></div></div>
+          <div class="upload-decoration decoration-right" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="orbit-dot"></span><span class="orbit-plus">+</span></div>
+          <div class="drop-overlay"><svg><use href="#i-upload"/></svg><strong>Lascia qui i tuoi file</strong><span>Al resto pensiamo noi.</span></div>
+        </div>
+        <input type="file" id="file-input" multiple hidden>
+        <div class="upload-footnote"><span><svg><use href="#i-lock"/></svg>I file restano sul server del tuo spazio.</span><span>Nessuna complicazione, solo i tuoi file.</span></div>
+      </section>
+
+      <section class="queue-section" id="queue-section" aria-labelledby="queue-title" hidden><div class="queue-header"><h2 id="queue-title">Caricamenti <span id="queue-summary"></span></h2><button class="text-button" id="clear-queue" type="button">Rimuovi completati</button></div><ul id="upload-queue" class="upload-queue"></ul></section>
+
+      <section class="files-section" aria-labelledby="files-title">
+        <div class="files-heading"><div><h2 id="files-title">Il tuo archivio <span class="file-count" id="file-count">0</span></h2><p>Le tue idee, nel posto giusto.</p></div><label class="search-box"><svg><use href="#i-search"/></svg><input id="search" type="search" placeholder="Cerca un file…" aria-label="Cerca un file per nome" autocomplete="off"><kbd aria-hidden="true">/</kbd></label></div>
+        <div class="file-toolbar"><div class="filter-tabs" role="group" aria-label="Filtra per tipo"><button class="filter-tab selected" type="button" data-filter="all" aria-pressed="true">Tutti i file</button><button class="filter-tab" type="button" data-filter="images" aria-pressed="false"><svg><use href="#i-image"/></svg>Immagini</button><button class="filter-tab" type="button" data-filter="documents" aria-pressed="false"><svg><use href="#i-file"/></svg>Documenti</button><button class="filter-tab" type="button" data-filter="other" aria-pressed="false"><svg><use href="#i-box"/></svg>Altri file</button></div><div class="view-options"><label class="sort-label"><span class="sr-only">Ordina file</span><select id="sort"><option value="newest">Più recenti</option><option value="oldest">Meno recenti</option><option value="name">Nome A–Z</option><option value="size">Dimensione</option></select></label><span class="toolbar-divider"></span><div class="view-switch" role="group" aria-label="Visualizzazione"><button class="icon-button selected" type="button" id="grid-view" aria-label="Visualizzazione a griglia" aria-pressed="true"><svg><use href="#i-grid"/></svg></button><button class="icon-button" type="button" id="list-view" aria-label="Visualizzazione a elenco" aria-pressed="false"><svg><use href="#i-list"/></svg></button></div></div></div>
+        <div class="file-results" aria-live="polite"><p class="loading-state" id="loading-state">Un momento, prepariamo il tuo spazio…</p><div class="empty-state" id="empty-state" hidden><div class="empty-illustration" aria-hidden="true"><div class="empty-circle"></div><svg class="empty-folder"><use href="#i-folder"/></svg><span class="empty-plus">+</span><span class="empty-star">✦</span><span class="empty-small-dot"></span></div><h3>Il prossimo inizio è qui.</h3><p>Il tuo archivio è ancora vuoto.<br>Carica il primo file e comincia a fare spazio.</p><button class="button button-secondary" id="empty-upload" type="button">Carica il primo file<svg><use href="#i-arrow"/></svg></button></div><div class="no-results" id="no-results" hidden><svg><use href="#i-search"/></svg><h3>Nessun file trovato</h3><p>Prova un altro nome o cambia il filtro.</p><button class="text-button" id="reset-filters" type="button">Mostra tutti i file</button></div><div class="load-error" id="load-error" hidden><svg><use href="#i-info"/></svg><h3>Non riusciamo a leggere l’archivio</h3><p>Controlla la connessione e riprova.</p><button class="button button-secondary" id="retry-load" type="button">Riprova</button></div><ul class="file-grid" id="file-list" aria-label="File caricati" hidden></ul></div>
+        <div class="archive-summary"><span id="storage-summary">0 file · 0 B utilizzati</span><span><svg><use href="#i-check"/></svg><span id="archive-status">Pronto per il tuo primo file</span></span></div>
+      </section>
+      <footer class="page-footer"><span>Un piccolo spazio. Tante possibilità.</span><span>Fatto per <strong>riutilizzare.</strong><svg><use href="#i-leaf"/></svg></span></footer>
+    </main>
+  </div>
+
+  <dialog id="help-dialog" class="modal"><div class="modal-top"><span class="modal-icon"><svg><use href="#i-scan"/></svg></span><button class="icon-button" type="button" data-close-dialog aria-label="Chiudi"><svg><use href="#i-close"/></svg></button></div><h2>Il tuo spazio, senza complicazioni.</h2><p>Un posto semplice dove caricare e ritrovare i tuoi file.</p><ol class="help-steps"><li><span>01</span><div><strong>Scegli i tuoi file</strong><p>Trascinali nell’area di upload o selezionali dal dispositivo. Puoi caricarne più di uno, fino a 50 MB ciascuno.</p></div></li><li><span>02</span><div><strong>Lascia che arrivino a destinazione</strong><p>Segui l’avanzamento. I file completati vengono salvati sul server e restano disponibili dopo il riavvio.</p></div></li><li><span>03</span><div><strong>Ritrova, scarica, fai spazio</strong><p>Cerca per nome, filtra per tipo e scarica i file quando ti servono. Puoi anche eliminarli definitivamente.</p></div></li></ol><div class="help-notice"><svg><use href="#i-info"/></svg><p>Questa prima versione ha un archivio condiviso, senza account. Chi ha accesso al sito può vedere e gestire tutti i file.</p></div><button class="button button-primary modal-action" type="button" data-close-dialog>Perfetto, cominciamo<svg><use href="#i-arrow"/></svg></button></dialog>
+  <dialog id="delete-dialog" class="modal delete-modal"><div class="modal-top"><span class="modal-icon danger"><svg><use href="#i-trash"/></svg></span><button class="icon-button" type="button" data-close-dialog aria-label="Chiudi"><svg><use href="#i-close"/></svg></button></div><h2>Facciamo spazio?</h2><p>Il file <strong id="delete-file-name"></strong> verrà eliminato definitivamente dal server.</p><p class="dialog-error" id="delete-error" role="alert" hidden></p><div class="modal-actions"><button class="button button-secondary" type="button" data-close-dialog>Annulla</button><button class="button button-danger" id="confirm-delete" type="button">Elimina file</button></div></dialog>
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+  <noscript><div class="noscript-message">Per caricare e gestire i file è necessario attivare JavaScript nel browser.</div></noscript>
+</body>
+</html>

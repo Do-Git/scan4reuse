@@ -23,7 +23,7 @@ The origin story links to [Startup Weekend Basel](https://startupweekendbasel.ch
 
 ## Branding and content source
 
-The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-material use case, app mockups, sample reuse report, pricing model and roadmap. These are integrated into the original logistics-startup concept, rather than presented as a sequence of pitch slides. The interface uses a calm green palette, clear service descriptions and a working delivery brief.
+The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-material use case, app mockups, sample reuse report and pricing model. These are integrated into the original logistics-startup concept, rather than presented as a sequence of pitch slides. The interface uses a calm green palette, clear service descriptions and a working delivery brief.
 
 Images in `public/assets/` are extracted from that deck. The five founder photographs are the original embedded photos, not AI-generated replacements. The unused generated artwork from the initial concept is not included in the site.
 
@@ -35,7 +35,7 @@ Team profiles preserve the user-confirmed photograph order and titles:
 4. Ivo Bosshard — Sustainability
 5. Domenico Dongiovanni — Business
 
-Construction-context figures and early interview feedback are attributed to the founding deck; they are not independently verified live metrics. The reuse report is visibly marked SAMPLE DATA. ESG content states goals, not verified carbon savings or certifications. The roadmap is presented as planned targets rather than completed milestones. No partner affiliations or endorsements are implied by the deck's references to other businesses.
+Construction-context figures and early interview feedback are attributed to the founding deck; they are not independently verified live metrics. The reuse report is visibly marked SAMPLE DATA. ESG content states goals, not verified carbon savings or certifications. No partner affiliations or endorsements are implied by the deck's references to other businesses.
 
 ## Delivery planner
 

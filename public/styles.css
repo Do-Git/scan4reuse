@@ -558,3 +558,87 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
   .closing-note p { font-size: 23px; }
 }
 .preview-notice { padding: 10px 22px; text-align: center; color: #466b41; background: #edf5e5; border-bottom: 1px solid #d9e7cc; font-size: 11px; line-height: 1.7; }
+
+/* Readable text on phones, including touch screens in landscape. */
+@media (max-width: 720px), (max-width: 960px) and (pointer: coarse) {
+  body { font-size: 16px; line-height: 1.6; }
+  .hero-copy>p:not(.hero-tagline), .section-heading>p, .step-card p,
+  .logistics-inner>div>p, .feature-list, .delivery-intro>p, .delivery-promises,
+  .form-description, .form-success>p, .showcase-card p, .purpose-grid p,
+  .deck-context p, .esg-grid p, .esg-grid .esg-goal, .sdg-heading p, .sdg-card p,
+  .story-copy p, .discovery-note p, .discovery-note blockquote,
+  .modal>p, .demo-listing p, .scanner-steps p, .pricing-intro>p,
+  .price-card>p, .price-card li, .billing-description, .price>span, .faq-list p {
+    font-size: 16px; line-height: 1.7;
+  }
+  .hero-origin p, .shipment-object p, .shipment-needs>span, .shipment-bottom>span,
+  .route-object div>span, .route-requirements>span, .board-footer,
+  .demo-note p, .field-hint, .form-error, .brief-preview, .success-summary,
+  .form-success .success-footnote, .concept-label, .esg-header>span,
+  .sdg-tag, .impact-footnote, .discovery-note small, .team-role, .team-note,
+  .footer-top>div>p, .footer-availability, .footer-bottom, .footer-bottom button, .desktop-nav a,
+  .pricing-demo, .plan-footer, .pricing-fineprint p, .estimate-result>span,
+  .seller-net, .listing-specs, .listing-price small, .modal .demo-disclaimer,
+  .preview-notice {
+    font-size: 14px; line-height: 1.65;
+  }
+  .eyebrow, .hero .eyebrow, .section-heading .eyebrow, .delivery-intro .eyebrow,
+  .sdg-heading .eyebrow, .pricing-intro .eyebrow, .pricing-cta .eyebrow,
+  .faq-section .eyebrow, .modal .eyebrow, .logistics-inner .eyebrow, .story-row .eyebrow, .small-label,
+  .price-card .small-label, .planner-top .small-label, .conditional-fields .small-label,
+  .shipment-top>span:first-child, .shipment-label, .shipment-object>div>span,
+  .shipment-journey small, .shipment-connection>span, .step-top, .board-top,
+  .route-object small, .route-stops small, .route-path, .tag,
+  .journey-strip>span:first-child, .product-label, .goal-label, .selected-plan,
+  .step-caption, .closing-note>span, .footer-links>div>span:first-child,
+  .plan-includes, .scanner-steps li>span { font-size: 12px; line-height: 1.6; letter-spacing: .5px; }
+  .hero .eyebrow { max-width: 100%; flex-wrap: wrap; }
+  .shipment-object h2 { font-size: 20px; }
+  .shipment-journey strong, .route-stops strong, .route-object h3,
+  .team-card h3, .scanner-steps strong, .sdg-card h4 { font-size: 18px; line-height: 1.4; }
+  .esg-icon>span, .team-portrait>span { font-size: 12px; }
+  .button, .text-link, .plain-link, .hero-actions .button, .hero-actions .plain-link,
+  .shipment-bottom .button, .step-card .text-link, .logistics-inner .button, .demo-listing .button,
+  .form-actions .button, .showcase-card .text-link, .price-card>.button,
+  .price-card>.text-link, .estimate-card .text-link, .pricing-cta .button,
+  .use-example, .deck-context summary, .discovery-note summary,
+  .faq-list summary, .mobile-menu a, .footer-links a, .footer-links button {
+    font-size: 16px; line-height: 1.5;
+  }
+  .inline-link { font-size: inherit; }
+  .button { max-width: 100%; min-height: 44px; white-space: normal; }
+  .mobile-menu a { padding-block: 12px; }
+  .hero-actions, .shipment-top, .route-object, .route-requirements,
+  .board-top, .board-footer { flex-wrap: wrap; }
+  .shipment-object { align-items: flex-start; }
+  .shipment-object>div:last-child { min-width: 0; }
+  .shipment-bottom { flex-direction: column; align-items: stretch; }
+  .shipment-bottom .button { margin-left: 0; white-space: normal; }
+  .journey-strip { flex-wrap: wrap; }
+  .journey-strip>div, .strip-connector { font-size: 16px; }
+  .planner-top { flex-wrap: wrap; gap: 10px; }
+  .form-progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .form-progress li { flex-direction: column; gap: 7px; font-size: 14px; line-height: 1.4; text-align: center; }
+  .form-progress li>span { width: 28px; height: 28px; font-size: 14px; }
+  label, .dimensions label, .dimension-label, .dimension-label>span,
+  .estimate-card label, .notes-label>span, .consent-label { font-size: 14px; line-height: 1.6; }
+  label { min-width: 0; }
+  input, select, textarea, .dimensions input { min-width: 0; font-size: 16px; line-height: 1.5; }
+  .checkbox-label { font-size: 16px; line-height: 1.6; }
+  .checkbox-label.consent-label { font-size: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .form-row.dimensions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dimension-label { flex-wrap: wrap; justify-content: flex-start; gap: 6px; }
+  .dimension-label>span { max-width: none; text-align: left; }
+  .use-example { max-width: 100%; text-align: left; }
+  .form-actions { flex-wrap: wrap; gap: 14px; }
+  .form-actions .step-caption { order: -1; flex-basis: 100%; }
+  .form-actions .button { margin-left: auto; }
+  .estimate-result { flex-wrap: wrap; }
+}
+@media (max-width: 520px) {
+  .sdg-card { grid-template-columns: 104px minmax(0, 1fr); align-items: center; }
+  .sdg-card>div { display: contents; }
+  .sdg-card h4 { margin: 0; }
+  .sdg-card p { grid-column: 1 / -1; }
+}

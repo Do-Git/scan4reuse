@@ -11,8 +11,8 @@ export function configurePreview(page) {
   note.setAttribute('role', 'note');
   note.textContent = page === 'upload'
     ? 'Anteprima interattiva: i file restano in memoria nel browser e si svuotano al ricaricamento. Nessun file viene inviato al server.'
-    : 'Interactive preview · files and requests stay in this browser and clear on reload. No bookings or payments.';
-  document.body.prepend(note);
+    : '';
+  if (note.textContent) document.body.prepend(note);
 
   if (page === 'upload') {
     const footnote = document.querySelector('.upload-footnote>span:first-child');

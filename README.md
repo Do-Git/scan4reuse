@@ -25,7 +25,9 @@ The origin story links to [Startup Weekend Basel](https://startupweekendbasel.ch
 
 The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-material use case, app mockups, sample reuse report and pricing model. These are integrated into the original logistics-startup concept, rather than presented as a sequence of pitch slides. The interface uses a calm green palette, clear service descriptions and a working delivery brief.
 
-Images in `public/assets/` are extracted from that deck. The five founder photographs are the original embedded photos, not AI-generated replacements. The unused generated artwork from the initial concept is not included in the site.
+Product, construction-context and team images in `public/assets/` are extracted from that deck. The five founder photographs are the original embedded photos, not AI-generated replacements. The unused generated artwork from the initial concept is not included in the site.
+
+The impact section connects Sustainable Development Goals 8, 9, 11, 12 and 13 to logistics through short descriptions and the official [United Nations goal icons](https://sdgs.un.org/goals). The five `sdg-*.jpg` assets are hosted locally; their originals are available at `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-NN.jpg`, with `NN` matching the two-digit goal number.
 
 Team profiles preserve the user-confirmed photograph order and titles:
 

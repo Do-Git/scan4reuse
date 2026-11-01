@@ -17,7 +17,7 @@ npm test
 npm run build:preview
 ```
 
-L’output è `.local/preview/site`. Il build copia una lista esplicita di 19 file pubblici e aggiunge la configurazione per l’hosting statico. Non copia il repository, `.git`, `.env`, credenziali, PDF allegati, file caricati o richieste salvate. Il manifesto di verifica è `.local/preview/manifest.json`, fuori dal sito da pubblicare.
+L’output è `.local/preview/site`. Il build copia una lista esplicita di 24 file pubblici, inclusi i cinque loghi SDG, e aggiunge la configurazione per l’hosting statico. Non copia il repository, `.git`, `.env`, credenziali, PDF allegati, file caricati o richieste salvate. Il manifesto di verifica è `.local/preview/manifest.json`, fuori dal sito da pubblicare.
 
 La versione pubblica è utilizzabile, con una differenza esplicita:
 

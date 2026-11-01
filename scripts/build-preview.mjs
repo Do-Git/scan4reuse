@@ -12,6 +12,7 @@ const files = [
   'styles.css', 'upload.css', 'app.js', 'upload.js', 'preview.js', 'icons.svg', 'favicon.svg',
   'assets/building-context.png', 'assets/workflow.png', 'assets/marketplace.png', 'assets/report.png',
   'assets/team-daria.png', 'assets/team-tomas.jpeg', 'assets/team-reazul.png', 'assets/team-ivo.png', 'assets/team-domenico.png',
+  'assets/sdg-08.jpg', 'assets/sdg-09.jpg', 'assets/sdg-11.jpg', 'assets/sdg-12.jpg', 'assets/sdg-13.jpg',
 ];
 
 // Copy only the reviewed public files. Never copy the checkout, environment,

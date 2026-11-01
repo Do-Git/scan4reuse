@@ -157,12 +157,15 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
         '/assets/team-daria.png': 'assets/team-daria.png', '/assets/team-tomas.jpeg': 'assets/team-tomas.jpeg',
         '/assets/team-reazul.png': 'assets/team-reazul.png', '/assets/team-ivo.png': 'assets/team-ivo.png',
         '/assets/team-domenico.png': 'assets/team-domenico.png',
+        '/assets/sdg-08.jpg': 'assets/sdg-08.jpg', '/assets/sdg-09.jpg': 'assets/sdg-09.jpg',
+        '/assets/sdg-11.jpg': 'assets/sdg-11.jpg', '/assets/sdg-12.jpg': 'assets/sdg-12.jpg',
+        '/assets/sdg-13.jpg': 'assets/sdg-13.jpg',
       };
       const asset = assets[path];
       if (!asset) throw new ApiError(404, 'Pagina non trovata.');
       const assetPath = join(publicDir, asset);
       const info = await stat(assetPath);
-      const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpeg': 'image/jpeg' };
+      const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
       response.writeHead(200, { 'Content-Type': types[extname(asset)], 'Content-Length': info.size, 'Cache-Control': 'no-cache' });
       if (request.method === 'HEAD') return response.end();
       const stream = createReadStream(assetPath);

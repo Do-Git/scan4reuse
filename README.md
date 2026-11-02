@@ -39,13 +39,15 @@ Team profiles preserve the user-confirmed photograph order and titles:
 
 Construction-context figures and early interview feedback are attributed to the founding deck; they are not independently verified live metrics. The reuse report is visibly marked SAMPLE DATA. ESG content states goals, not verified carbon savings or certifications. No partner affiliations or endorsements are implied by the deck's references to other businesses.
 
-## Delivery planner
+## Client and logistics partner workflow
 
-The three-step form collects component details, dimensions and weight; origin and destination; pickup date; packaging and fragile-item needs; handling service; and contact details with consent. Room-of-choice and two-person services show floor/lift fields. Pallets show forklift availability. A sample reclaimed window can prefill the object details; its measurements and weight are illustrative and need confirmation.
+The client customizes the delivery for a particular good. The three-step form collects dimensions, weight, handling service, collection readiness, packaging, site access, dates and time windows, equipment, final placement and contact details. Optional services cover assembly, temporary storage/phased delivery, unpacking, building protection, condition photos, signed handover and cover clarification. Architect and facility-manager roles are supported alongside buyers, sellers and businesses.
+
+The logistics partner view uses the same request. A partner accepts it for review, then submits an itemised quote or explicitly proposes adjusted timing, a different service or another approach. The client can accept the example proposal or ask for a revision. Superseded and expired proposals cannot be accepted, and editing the request resets the quotation state. Both the request and proposal can be downloaded. Research informing the options is recorded in [LOGISTICS_RESEARCH.md](LOGISTICS_RESEARCH.md).
 
 `POST /api/delivery-requests` validates and saves a demo brief as a private-mode JSON file under `.local/uploads/delivery-requests/`. The browser receives a reference and can download the complete brief as text. Requests are not exposed through a public list/read API.
 
-**No carrier is automatically contacted, no shipment is confirmed, and no payment is collected.** Live carrier-matching or messaging needs confirmed partner details and a separate integration. The scanner, report generator and sales marketplace are product concepts illustrated by the deck, not released services.
+Partner quotes and example agreements run in memory in the browser, including when the Node application is used. No carrier is contacted and no shipment or payment is created. Real partner accounts, request distribution and shared quotation storage require a backend integration. The scanner, report generator and sales marketplace remain supporting product concepts.
 
 ## Tests
 
@@ -53,9 +55,9 @@ The three-step form collects component details, dimensions and weight; origin an
 npm test
 ```
 
-The 12 integration tests use temporary directories and local HTTP servers. They cover upload/download integrity, persistence, deletion, size limits (including streamed requests), interrupted uploads, static pages and data protection, validated building-material delivery briefs, conditional requirements, consent and invalid/cross-site submissions.
+The 19 tests cover upload/download integrity, persistence, deletion, size limits, interrupted uploads, static pages, data protection, professional delivery requirements, consent and invalid submissions. Quotation tests cover review before quoting, requested versus adjusted scope, exact-cent totals, revisions, explicit client acceptance, request edits, stale offers and expiry.
 
-Browser validation uses Chromium to exercise the Node application and the static preview: report/commission calculators, report previews, hero/marketplace prefilling, adaptive delivery fields, brief export, upload/download/deletion, mobile navigation and layouts at 320–1440px. The static preview was also checked to make no API requests while using its demo data. Verification screenshots are retained locally under `.local/verification/`, outside Git.
+Browser validation covers the client-to-partner request, quote, adjustment, revision, approval and download flow; request edits; keyboard tabs; calculators; uploads and mobile layouts at 320–1440px. The static preview makes no API mutations while using its example data. Verification assets are kept outside Git.
 
 ## Data and deployment
 

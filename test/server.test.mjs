@@ -131,7 +131,7 @@ test('serves the application with security headers and keeps data and source fil
   assert.equal(home.status, 200);
   assert.match(await home.text(), /<html lang="en">/);
   assert.match(home.headers.get('content-security-policy'), /object-src 'none'/);
-  for (const path of ['/styles.css', '/app.js', '/favicon.svg', '/pricing', '/upload', '/upload.css', '/upload.js', '/icons.svg']) assert.equal((await fetch(base + path)).status, 200);
+  for (const path of ['/styles.css', '/app.js', '/partner.js', '/delivery-options.js', '/favicon.svg', '/pricing', '/upload', '/upload.css', '/upload.js', '/icons.svg']) assert.equal((await fetch(base + path)).status, 200);
   for (const path of ['/server.mjs', '/.git/config', '/.local/uploads', '/api/files/no-such-file', '/api/unknown']) assert.equal((await fetch(base + path)).status, 404);
   const head = await fetch(base, { method: 'HEAD' });
   assert.equal(head.status, 200);
@@ -184,6 +184,26 @@ test('delivery requirements adapt to pallets and doorstep delivery; untrusted fi
   assert.equal(request.status, 'demo_brief_saved');
   assert.equal(request.carrier, undefined);
   assert.equal(request.pickupFloor, undefined);
+});
+
+test('architect and facility requests retain site, timing and service requirements with strict validation', async t => {
+  const { base } = await fixture(t);
+  for (const requesterRole of ['architect', 'facility-manager']) {
+    const payload = { ...validBrief, requesterRole, deliveryDate: '2099-11-11', handlingUnit: 'crate', readiness: 'ready', declaredValue: '1200.50', scheduleFlexibility: 'fixed', pickupWindow: '09:00–11:00', deliveryWindow: '17:00–19:00', pickupAccess: 'Gate B', deliveryAccess: 'Reserved freight lift', accessMeasurements: 'Lift 140 × 220 × 210 cm', equipment: 'tail-lift', placement: 'Room 204', assembly: true, conditionRecord: true, insuranceQuote: true };
+    const response = await fetch(`${base}/api/delivery-requests`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    assert.equal(response.status, 201);
+    const { request } = await response.json();
+    assert.equal(request.requesterRole, requesterRole);
+    assert.equal(request.deliveryAccess, 'Reserved freight lift');
+    assert.equal(request.deliveryWindow, '17:00–19:00');
+    assert.equal(request.declaredValue, 1200.5);
+    assert.equal(request.conditionRecord, true);
+    assert.equal(request.equipment, 'tail-lift');
+    for (const invalid of [{ deliveryDate: '2099-11-09' }, { equipment: 'teleport' }, { pickupAccess: 'x'.repeat(401) }]) {
+      const bad = await fetch(`${base}/api/delivery-requests`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, ...invalid }) });
+      assert.equal(bad.status, 400);
+    }
+  }
 });
 
 test('rejects incomplete, unconsented or invalid delivery briefs before writing data', async t => {

@@ -1,4 +1,6 @@
 import { browserPreview, configurePreview, preparePreviewBrief } from './preview.js';
+import { describeDeliveryOptions, readDeliveryOptions } from './delivery-options.js';
+import { createPartnerWorkspace } from './partner.js';
 
 configurePreview('site');
 const $ = selector => document.querySelector(selector);
@@ -57,12 +59,25 @@ let step = 0;
 let savedBrief = null;
 let selectedPlan = 'none';
 let selectedBilling = 'monthly';
+const exchange = form ? createPartnerWorkspace({ describeBrief, onExample: loadExampleRequest }) : null;
+
+function loadExampleRequest(request) {
+  for (const field of form.elements) {
+    if (!field.name || !Object.hasOwn(request, field.name)) continue;
+    if (field.type === 'checkbox') field.checked = request[field.name] === true;
+    else field.value = request[field.name] ?? '';
+  }
+  updateCategory();
+  $('#access-fields').hidden = request.service === 'doorstep';
+  completeRequest(request);
+}
 
 function fillExample() {
   if (!form) {
     window.location.href = '/?item=demo-window#delivery';
     return;
   }
+  exchange.showSide('client');
   if (form.hidden) resetPlanner();
   const example = { listingId: 'demo-window', itemName: 'Reclaimed window frame', category: 'building-materials', quantity: 1, length: 12, width: 100, height: 140, weight: 18 };
   for (const [name, value] of Object.entries(example)) form.elements.namedItem(name).value = value;
@@ -114,6 +129,7 @@ function describeBrief(data) {
     parts.push(`Pickup floor: ${data.pickupFloor} (${data.pickupLift ? 'lift available' : 'no lift'}). Delivery floor: ${data.deliveryFloor} (${data.deliveryLift ? 'lift available' : 'no lift'}).`);
   }
   if (extras.length) parts.push(extras.join(' · '));
+  parts.push(...describeDeliveryOptions(data));
   if (data.plan !== 'none' && (planLabels[data.plan] || legacyPlans[data.plan])) parts.push(`Service interest: ${planLabels[data.plan] || planLabels[legacyPlans[data.plan]]}`);
   if (data.notes) parts.push(`Notes: ${data.notes}`);
   return parts;
@@ -123,10 +139,28 @@ function renderBrief(target, data) {
   target.replaceChildren(...describeBrief(data).map((line, index) => node(index ? 'div' : 'strong', line)));
 }
 
+function completeRequest(request) {
+  savedBrief = request;
+  $('#request-reference').textContent = request.reference;
+  renderBrief($('#success-summary'), request);
+  form.hidden = true;
+  $('.form-progress').hidden = true;
+  $('#form-success').hidden = false;
+  exchange.setRequest(request);
+}
+
 function validateStep() {
   const fields = [...form.querySelectorAll(`[data-step="${step}"] input, [data-step="${step}"] select, [data-step="${step}"] textarea`)];
   for (const field of fields) {
-    if (!field.disabled && !field.closest('[hidden]') && !field.checkValidity()) { field.reportValidity(); return false; }
+    if (!field.disabled && !field.closest('[hidden]') && !field.checkValidity()) {
+      const details = field.closest('details');
+      if (details) details.open = true;
+      field.reportValidity(); return false;
+    }
+  }
+  if (step === 1) {
+    try { readDeliveryOptions(values()); }
+    catch (error) { $('#form-error').textContent = error.message; $('#form-error').hidden = false; return false; }
   }
   return true;
 }
@@ -176,6 +210,7 @@ function updateCategory() {
 
 function resetPlanner() {
   form.reset();
+  exchange.clear();
   savedBrief = null;
   form.hidden = false;
   $('#form-success').hidden = true;
@@ -192,6 +227,8 @@ if (form) {
   selectedBilling = params.get('billing') === 'annual' ? 'annual' : 'monthly';
   if (selectedPlan !== 'none') { $('#selected-plan').hidden = false; $('#selected-plan').textContent = planLabels[selectedPlan]; }
   form.elements.namedItem('pickupDate').min = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Zurich', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  form.elements.namedItem('deliveryDate').min = form.elements.namedItem('pickupDate').min;
+  form.elements.namedItem('pickupDate').addEventListener('change', event => { form.elements.namedItem('deliveryDate').min = event.target.value || form.elements.namedItem('pickupDate').min; });
   $('#fill-example').addEventListener('click', fillExample);
   $('#form-next').addEventListener('click', () => { if (validateStep()) goToStep(step + 1, true); });
   $('#form-back').addEventListener('click', () => goToStep(step - 1, true));
@@ -218,12 +255,7 @@ if (form) {
         data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Your brief could not be saved. Please try again.');
       }
-      savedBrief = data.request;
-      $('#request-reference').textContent = savedBrief.reference;
-      renderBrief($('#success-summary'), savedBrief);
-      form.hidden = true;
-      $('.form-progress').hidden = true;
-      $('#form-success').hidden = false;
+      completeRequest(data.request);
       $('#form-success').focus({ preventScroll: true });
       $('.delivery-planner').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (error) {
@@ -252,4 +284,12 @@ if (form) {
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   });
   $('#new-request').addEventListener('click', resetPlanner);
+  $('#edit-request').addEventListener('click', () => {
+    exchange.clear();
+    savedBrief = null;
+    form.hidden = false;
+    $('#form-success').hidden = true;
+    $('.form-progress').hidden = false;
+    goToStep(0, true);
+  });
 }

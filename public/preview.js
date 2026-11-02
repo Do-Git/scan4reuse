@@ -1,3 +1,5 @@
+import { readDeliveryOptions } from './delivery-options.js';
+
 // Public previews use browser memory, keeping development data off the deployment.
 export const browserPreview = document.documentElement.dataset.storage === 'browser';
 const files = new Map();
@@ -27,7 +29,7 @@ export function configurePreview(page) {
   }
 
   const description = document.querySelector('.demo-note p');
-  if (description) description.textContent = 'Browser-only demo. Prepare and download a request to share with a partner. Nothing is sent to a carrier or stored on the server.';
+  if (description) description.textContent = 'Explore both sides: customize a request, prepare a partner quote and review it as the client. This example does not contact a carrier.';
   const consent = document.querySelector('.consent-label>span');
   if (consent) {
     consent.replaceChildren(document.createTextNode('I understand this brief is prepared in my browser. No partner will be contacted automatically. '));
@@ -43,14 +45,14 @@ export function configurePreview(page) {
   const button = document.querySelector('#form-submit');
   if (button?.firstChild) button.firstChild.textContent = 'Prepare my delivery brief ';
   const privacy = document.querySelectorAll('#privacy-dialog>p');
-  if (privacy[1]) privacy[1].textContent = 'In this public preview, delivery briefs are prepared only in browser memory and can be downloaded by you. No contact information is sent to the hosting platform or a carrier. No shipment is booked and no payment is taken.';
+  if (privacy[1]) privacy[1].textContent = 'Delivery requests, partner proposals and example agreements in this public preview stay in this browser session and can be downloaded. Reloading clears the example. No contact information is sent to a carrier, no shipment is booked and no payment is taken.';
   if (privacy[2]) privacy[2].textContent = 'The upload workspace in this preview also keeps files only in browser memory, up to 200 MB per session. Reloading or closing the page clears this demo state. No analytics or third-party tracking is used.';
 }
 
 export async function preparePreviewBrief(data) {
   if (data.consent !== true) throw new Error('Your confirmation is required to prepare this demo brief.');
   const id = crypto.randomUUID();
-  const record = { ...data, id, reference: `S4R-PREVIEW-${id.slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: 'browser_preview' };
+  const record = { ...data, ...readDeliveryOptions(data), id, reference: `S4R-PREVIEW-${id.slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: 'browser_preview' };
   for (const key of ['quantity', 'length', 'width', 'height', 'weight', 'pickupFloor', 'deliveryFloor']) {
     if (record[key] !== undefined) record[key] = Number(record[key]);
   }

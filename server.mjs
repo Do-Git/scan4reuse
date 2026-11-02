@@ -151,6 +151,7 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
         '/pricing': 'pricing.html', '/pricing/': 'pricing.html', '/pricing.html': 'pricing.html',
         '/upload': 'upload.html', '/upload/': 'upload.html', '/upload.html': 'upload.html',
         '/styles.css': 'styles.css', '/app.js': 'app.js', '/preview.js': 'preview.js', '/icons.svg': 'icons.svg',
+        '/delivery-options.js': 'delivery-options.js', '/partner.js': 'partner.js',
         '/upload.css': 'upload.css', '/upload.js': 'upload.js', '/favicon.svg': 'favicon.svg',
         '/assets/workflow.png': 'assets/workflow.png', '/assets/report.png': 'assets/report.png',
         '/assets/marketplace.png': 'assets/marketplace.png', '/assets/building-context.png': 'assets/building-context.png',

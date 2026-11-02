@@ -1,6 +1,6 @@
 # Scan4Reuse
 
-An English-language landing page for a circular-logistics startup, built with Node.js and plain HTML, CSS and JavaScript. The main journey connects buyers and logistics partners; the slide deck supplies the supporting scanning, marketplace, reporting and ESG content. No web framework or external application packages are used.
+An English-language landing page for a circular-logistics startup, built with Node.js and plain HTML, CSS and JavaScript. The main journey connects delivery clients and logistics partners, supported by scanning, marketplace, reporting and ESG content. PDF reports use a self-hosted renderer and embedded fonts. No web framework or package installation is required to run the application.
 
 ## Run
 
@@ -45,7 +45,9 @@ The client customizes the delivery for a particular good. The three-step form co
 
 The logistics partner view uses the same request. A partner accepts it for review, then submits an itemised quote or explicitly proposes adjusted timing, a different service or another approach. The client can accept the example proposal or ask for a revision. Superseded and expired proposals cannot be accepted, and editing the request resets the quotation state. Both the request and proposal can be downloaded. Research informing the options is recorded in [LOGISTICS_RESEARCH.md](LOGISTICS_RESEARCH.md).
 
-`POST /api/delivery-requests` validates and saves a demo brief as a private-mode JSON file under `.local/uploads/delivery-requests/`. The browser receives a reference and can download the complete brief as text. Requests are not exposed through a public list/read API.
+`POST /api/delivery-requests` validates and saves a demo brief as a private-mode JSON file under `.local/uploads/delivery-requests/`. The browser receives a reference and downloads the complete brief as a branded A4 PDF report. Requests are not exposed through a public list/read API.
+
+Both brief and partner-proposal downloads produce actual PDF files, including selectable text, embedded fonts, section headings, automatic page breaks and page numbers. Proposal reports include the quoted scope, price, changes, acceptance status and original client requirements. Generation happens in the browser; the library and fonts load from the site's own assets when a report is downloaded. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the pinned library and font licenses.
 
 Partner quotes and example agreements run in memory in the browser, including when the Node application is used. No carrier is contacted and no shipment or payment is created. Real partner accounts, request distribution and shared quotation storage require a backend integration. The scanner, report generator and sales marketplace remain supporting product concepts.
 

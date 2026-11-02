@@ -4,7 +4,7 @@
 
 Apri il collegamento in un browser. La landing offre **Plan a delivery** per il modulo logistico, **Pricing** per i prezzi e i calcolatori, e i collegamenti ai concept e al workspace. Anche gli URL diretti https://scan4reuse-preview.vercel.app/pricing e https://scan4reuse-preview.vercel.app/upload sono stati verificati.
 
-Il progetto usa HTML, CSS e JavaScript, con un server HTTP nativo di Node.js. Non usa React, Next.js, Vite o un altro framework. Le dipendenze applicative esterne sono zero; serve Node.js 22 o successivo.
+Il progetto usa HTML, CSS e JavaScript, con un server HTTP nativo di Node.js. Non usa React, Next.js, Vite o un altro framework. I report PDF usano jsPDF e font inclusi negli asset locali; non serve un servizio PDF esterno. Serve Node.js 22 o successivo.
 
 Nella sessione Codex Cloud verificata non è stato esposto un URL di anteprima o uno strumento di inoltro delle porte. Il server locale è stato avviato e controllato con Chromium, ma il suo indirizzo di loopback non è un URL pubblico da aprire dal proprio computer.
 
@@ -17,7 +17,7 @@ npm test
 npm run build:preview
 ```
 
-L’output è `.local/preview/site`. Il build copia una lista esplicita di 26 file pubblici, inclusi i cinque loghi SDG e i moduli per requisiti e preventivi logistici, e aggiunge la configurazione per l’hosting statico. Non copia il repository, `.git`, `.env`, credenziali, PDF allegati, file caricati o richieste salvate. Il manifesto di verifica è `.local/preview/manifest.json`, fuori dal sito da pubblicare.
+L’output è `.local/preview/site`. Il build copia una lista esplicita di 32 file pubblici, inclusi i cinque loghi SDG, i moduli logistici e le risorse con licenza per generare PDF, e aggiunge la configurazione per l’hosting statico. Non copia il repository, `.git`, `.env`, credenziali, PDF allegati, file caricati o richieste salvate. Il manifesto di verifica è `.local/preview/manifest.json`, fuori dal sito da pubblicare.
 
 La versione pubblica è utilizzabile, con una differenza esplicita:
 

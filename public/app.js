@@ -1,6 +1,7 @@
 import { browserPreview, configurePreview, preparePreviewBrief } from './preview.js';
 import { describeDeliveryOptions, readDeliveryOptions } from './delivery-options.js';
 import { createPartnerWorkspace } from './partner.js';
+import { downloadDeliveryBriefPdf } from './pdf-report.js';
 
 configurePreview('site');
 const $ = selector => document.querySelector(selector);
@@ -267,21 +268,23 @@ if (form) {
     }
   });
 
-  $('#download-brief').addEventListener('click', () => {
+  $('#download-brief').addEventListener('click', async () => {
     if (!savedBrief) return;
-    const lines = [
-      'SCAN4REUSE — DEMO DELIVERY BRIEF', `Reference: ${savedBrief.reference}`, `Created: ${savedBrief.createdAt}`, '',
-      ...describeBrief(savedBrief), '', `Requested by: ${savedBrief.contactName} (${savedBrief.requesterRole})`, `Email: ${savedBrief.email}`, '',
-      'This brief is not a booking or quote. No carrier has been contacted. Share it with a logistics partner to discuss availability, handling, insurance and pricing.',
-    ];
-    const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `${savedBrief.reference}-delivery-brief.txt`;
-    document.body.append(anchor);
-    anchor.click();
-    anchor.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    const button = $('#download-brief');
+    const label = button.firstChild.textContent;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    button.firstChild.textContent = 'Preparing PDF… ';
+    $('#brief-download-error').hidden = true;
+    try { await downloadDeliveryBriefPdf(savedBrief); }
+    catch {
+      $('#brief-download-error').textContent = 'We couldn’t prepare the PDF report. Please try again.';
+      $('#brief-download-error').hidden = false;
+    } finally {
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.firstChild.textContent = label;
+    }
   });
   $('#new-request').addEventListener('click', resetPlanner);
   $('#edit-request').addEventListener('click', () => {

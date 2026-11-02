@@ -11,6 +11,8 @@ const files = [
   'index.html', 'pricing.html', 'upload.html',
   'styles.css', 'upload.css', 'app.js', 'upload.js', 'preview.js', 'icons.svg', 'favicon.svg',
   'delivery-options.js', 'partner.js',
+  'pdf-report.js', 'vendor/jspdf.umd.min.js', 'vendor/LICENSE-jsPDF.txt',
+  'assets/fonts/DejaVuSans.ttf', 'assets/fonts/DejaVuSans-Bold.ttf', 'assets/fonts/LICENSE-DejaVu.txt',
   'assets/building-context.png', 'assets/workflow.png', 'assets/marketplace.png', 'assets/report.png',
   'assets/team-daria.png', 'assets/team-tomas.jpeg', 'assets/team-reazul.png', 'assets/team-ivo.png', 'assets/team-domenico.png',
   'assets/sdg-08.jpg', 'assets/sdg-09.jpg', 'assets/sdg-11.jpg', 'assets/sdg-12.jpg', 'assets/sdg-13.jpg',

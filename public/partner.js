@@ -1,4 +1,5 @@
 import { DeliveryExchange, readDeliveryOptions, serviceNames, today } from './delivery-options.js';
+import { downloadPartnerProposalPdf } from './pdf-report.js';
 
 const money = amount => new Intl.NumberFormat('en-CH', { style: 'currency', currency: 'CHF' }).format(amount);
 const afterDays = days => {
@@ -184,16 +185,24 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     try { exchange.accept($('#accept-quote').dataset.proposalId); render(); }
     catch (error) { $('#client-exchange-error').textContent = error.message; $('#client-exchange-error').hidden = false; }
   });
-  $('#download-quote').addEventListener('click', () => {
+  $('#download-quote').addEventListener('click', async () => {
     if (!exchange.proposal) return;
     const { request, proposal: quote, stage } = exchange;
-    const lines = ['SCAN4REUSE — EXAMPLE DELIVERY PROPOSAL', `Request: ${request.reference}`, `Partner: ${quote.partnerName}`, `Status: ${statusNames[stage]}`, '', ...describeBrief(request), '', 'PARTNER PROPOSAL', `Pickup: ${quote.pickupDate}`, `Delivery: ${quote.deliveryDate || 'To agree'} ${quote.deliveryWindow}`, `Service: ${serviceNames[quote.service]}`, `Proposed changes: ${quote.changes || 'None'}`, `Transport: ${money(quote.transportCents / 100)}`, `Handling: ${money(quote.handlingCents / 100)}`, `Added services: ${money(quote.extrasCents / 100)}`, `Total: ${money(quote.totalCents / 100)}`, `VAT: ${quote.taxBasis}`, `Valid until: ${quote.validUntil}`, `Crew / equipment: ${quote.crewEquipment}`, `Scope and conditions: ${quote.scope}`, '', 'Interactive example only. No shipment is booked.'];
-    const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
-    const link = element('a');
-    link.href = url;
-    link.download = `${request.reference}-proposal.txt`;
-    document.body.append(link); link.click(); link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    const button = $('#download-quote');
+    const label = button.textContent;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    button.textContent = 'Preparing PDF…';
+    $('#client-exchange-error').hidden = true;
+    try { await downloadPartnerProposalPdf(request, quote, stage); }
+    catch {
+      $('#client-exchange-error').textContent = 'We couldn’t prepare the proposal PDF. Please try again.';
+      $('#client-exchange-error').hidden = false;
+    } finally {
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = label;
+    }
   });
   render();
   if (new URLSearchParams(location.search).get('side') === 'partner') showSide('partner');

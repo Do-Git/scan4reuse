@@ -132,6 +132,12 @@ test('serves the application with security headers and keeps data and source fil
   assert.match(await home.text(), /<html lang="en">/);
   assert.match(home.headers.get('content-security-policy'), /object-src 'none'/);
   for (const path of ['/styles.css', '/app.js', '/partner.js', '/delivery-options.js', '/favicon.svg', '/pricing', '/upload', '/upload.css', '/upload.js', '/icons.svg']) assert.equal((await fetch(base + path)).status, 200);
+  for (const [path, type] of [['/pdf-report.js', 'text/javascript'], ['/vendor/jspdf.umd.min.js', 'text/javascript'], ['/assets/fonts/DejaVuSans.ttf', 'font/ttf'], ['/assets/fonts/DejaVuSans-Bold.ttf', 'font/ttf'], ['/vendor/LICENSE-jsPDF.txt', 'text/plain'], ['/assets/fonts/LICENSE-DejaVu.txt', 'text/plain']]) {
+    const resource = await fetch(base + path, { method: 'HEAD' });
+    assert.equal(resource.status, 200);
+    assert.ok(resource.headers.get('content-type').startsWith(type));
+    assert.ok(Number(resource.headers.get('content-length')) > 0);
+  }
   for (const path of ['/server.mjs', '/.git/config', '/.local/uploads', '/api/files/no-such-file', '/api/unknown']) assert.equal((await fetch(base + path)).status, 404);
   const head = await fetch(base, { method: 'HEAD' });
   assert.equal(head.status, 200);

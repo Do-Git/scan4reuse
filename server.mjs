@@ -152,6 +152,9 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
         '/upload': 'upload.html', '/upload/': 'upload.html', '/upload.html': 'upload.html',
         '/styles.css': 'styles.css', '/app.js': 'app.js', '/preview.js': 'preview.js', '/icons.svg': 'icons.svg',
         '/delivery-options.js': 'delivery-options.js', '/partner.js': 'partner.js',
+        '/pdf-report.js': 'pdf-report.js', '/vendor/jspdf.umd.min.js': 'vendor/jspdf.umd.min.js', '/vendor/LICENSE-jsPDF.txt': 'vendor/LICENSE-jsPDF.txt',
+        '/assets/fonts/DejaVuSans.ttf': 'assets/fonts/DejaVuSans.ttf', '/assets/fonts/DejaVuSans-Bold.ttf': 'assets/fonts/DejaVuSans-Bold.ttf',
+        '/assets/fonts/LICENSE-DejaVu.txt': 'assets/fonts/LICENSE-DejaVu.txt',
         '/upload.css': 'upload.css', '/upload.js': 'upload.js', '/favicon.svg': 'favicon.svg',
         '/assets/workflow.png': 'assets/workflow.png', '/assets/report.png': 'assets/report.png',
         '/assets/marketplace.png': 'assets/marketplace.png', '/assets/building-context.png': 'assets/building-context.png',
@@ -166,7 +169,7 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
       if (!asset) throw new ApiError(404, 'Pagina non trovata.');
       const assetPath = join(publicDir, asset);
       const info = await stat(assetPath);
-      const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
+      const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.ttf': 'font/ttf', '.txt': 'text/plain; charset=utf-8' };
       response.writeHead(200, { 'Content-Type': types[extname(asset)], 'Content-Length': info.size, 'Cache-Control': 'no-cache' });
       if (request.method === 'HEAD') return response.end();
       const stream = createReadStream(assetPath);

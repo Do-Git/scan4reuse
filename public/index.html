@@ -14,10 +14,10 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="/" aria-label="Scan4Reuse home">SCAN4REUSE<span class="brand-icon" aria-hidden="true">+</span></a>
-    <nav class="desktop-nav" aria-label="Main navigation"><a href="/#how-it-works">The journey</a><a href="/#ecosystem">Supporting tools</a><a href="/#impact">Our goals</a><a href="/#team">Our team</a><a href="/pricing">Pricing</a></nav>
+    <nav class="desktop-nav" aria-label="Main navigation"><a href="/#how-it-works">The journey</a><a href="/#ecosystem">Supporting tools</a><a href="/#impact">Our goals</a><a href="/#team">Our team</a><a href="#pricing">Pricing</a></nav>
     <a class="button header-cta" href="/#delivery">Plan a delivery <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></a>
     <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-menu"><svg class="icon" aria-hidden="true"><use href="/icons.svg#menu"></use></svg></button>
-    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden><a href="/#how-it-works">The journey</a><a href="/#ecosystem">Supporting tools</a><a href="/#impact">Our goals</a><a href="/#team">Our team</a><a href="/pricing">Pricing</a><a href="/#delivery">Plan a delivery <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow"></use></svg></a></nav>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden><a href="/#how-it-works">The journey</a><a href="/#ecosystem">Supporting tools</a><a href="/#impact">Our goals</a><a href="/#team">Our team</a><a href="#pricing">Pricing</a><a href="/#delivery">Plan a delivery <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow"></use></svg></a></nav>
   </header>
 
   <main id="main">
@@ -28,6 +28,7 @@
 <h1 id="hero-title">Reuse.<br>Across Switzerland.<br><span class="hero-highlight">Delivered.</span>
 </h1>
 <p>Buy and sell reusable materials across Switzerland. Customize the delivery you need, then connect with a logistics partner to agree collection, handling, placement and the final price.</p>
+<div class="hero-pricing" aria-label="Scan4Reuse pricing"><div><strong>8%</strong><span>Item-sale fee</span></div><div><strong>8%</strong><span>Partner delivery fee</span></div><div><strong>CHF 5</strong><span>Report per m²</span></div></div>
 <div class="hero-actions">
 <a class="button button-dark" href="#delivery">Plan a delivery <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></a><a class="plain-link" href="#how-it-works">How the platform works <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow"></use></svg></a>
 </div>
@@ -76,6 +77,15 @@
 <svg class="icon" aria-hidden="true"><use href="/icons.svg#leaf"></use></svg>Deliver</div>
 </div></section>
 
+    <section class="section wrap home-pricing" id="pricing" aria-labelledby="home-pricing-title">
+<div class="section-heading"><div><span class="eyebrow">OUR PRICING · ACROSS SWITZERLAND</span><h2 id="home-pricing-title">Clear pricing.<br><em>For every transaction.</em></h2></div><p>The sale and delivery fees each use their own transaction value. See the rates and calculate seller proceeds, the partner amount or a report estimate here.</p></div>
+<div class="estimator-grid">
+<article class="estimate-card home-price-card partner-estimate"><span class="small-label">01 / LOGISTICS PARTNER</span><h3>Final delivery price. Partner amount.</h3><div class="home-price-rate">8<span>%</span></div><p>Deducted from the logistics partner’s final agreed delivery price, including any client-approved adjustments.</p><label for="delivery-value">Final delivery price, after adjustments (CHF)<input id="delivery-value" type="number" min="0" max="100000000" step="0.01" value="1000" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Delivery transaction fee · 8%</span><output id="partner-fee-estimate" for="delivery-value">CHF 80.00</output></div><div class="seller-net" aria-live="polite"><span>Partner amount after fee</span><output id="partner-amount-estimate" for="delivery-value">CHF 920.00</output></div></article>
+<article class="estimate-card home-price-card"><span class="small-label">02 / PROFESSIONAL REUSE REPORT</span><h3>Your site. A report estimate.</h3><div class="home-price-rate">CHF 5<span> / m²</span></div><p>A professional reuse report is priced per square metre of surveyed area.</p><label for="report-area">Surveyed area (m²)<input id="report-area" type="number" min="0" max="1000000" step="0.1" value="100" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Area × CHF 5 / m²</span><output id="report-estimate" for="report-area">CHF 500.00</output></div><button class="text-link" type="button" data-open="report-dialog">View the sample report <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></button></article>
+<article class="estimate-card home-price-card"><span class="small-label">03 / MARKETPLACE SALE</span><h3>Sold item value. Seller proceeds.</h3><div class="home-price-rate">8<span>%</span></div><p>Deducted from the actual sold item transaction. The seller receives the sale proceeds after the fee.</p><label for="sale-value">Final sold item value (CHF)<input id="sale-value" type="number" min="0" max="100000000" step="0.01" value="1000" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Item-sale transaction fee · 8%</span><output id="commission-estimate" for="sale-value">CHF 80.00</output></div><div class="seller-net" aria-live="polite"><span>Seller proceeds after fee</span><output id="seller-estimate" for="sale-value">CHF 920.00</output></div></article>
+</div><p class="home-pricing-footnote">Examples are illustrative. Seller proceeds and partner amounts are before other costs and taxes. Each 8% fee applies to its own transaction value. There is no monthly subscription.</p>
+</section>
+
     <section class="section wrap" id="how-it-works" aria-labelledby="how-title"><div class="section-heading">
 <div>
 <span class="eyebrow">FROM AVAILABLE MATERIAL TO NEXT USE</span><h2 id="how-title">One material.<br>Its next use.<br><em>A shared plan.</em>
@@ -107,7 +117,7 @@
 <span class="eyebrow">ONE REQUEST · CLIENT AND LOGISTICS PARTNER</span><h2 id="logistics-title">From pickup to placement.<br><em>Across Switzerland.</em>
 </h2>
 <p>Our delivery platform connects clients and logistics partners throughout Switzerland. The client specifies the item, route, handling and site access. The partner responds with an itemised quote or a practical alternative, and the client approves the final scope and price.</p>
-<p><strong>Two services. Two separate 8% transaction fees.</strong> Scan4Reuse deducts 8% from the sold item’s transaction value and a separate 8% from the logistics partner’s final agreed delivery price, including any client-approved adjustments. Each fee comes from its own transaction amount. <a class="inline-link" href="/pricing#transaction-fees">See both transaction fees</a>.</p>
+<p><strong>Two services. Two separate 8% transaction fees.</strong> Scan4Reuse deducts 8% from the sold item’s transaction value and a separate 8% from the logistics partner’s final agreed delivery price, including any client-approved adjustments. Each fee comes from its own transaction amount. <a class="inline-link" href="#pricing">See both transaction fees</a>.</p>
 <ul class="feature-list">
 <li>
 <svg class="icon" aria-hidden="true"><use href="/icons.svg#check"></use></svg>Pickup and handling requirements for locations across Switzerland</li>
@@ -478,7 +488,7 @@
 <span>THE PLATFORM</span><a href="/#delivery">Connected logistics</a><button type="button" data-open="scanner-dialog">iPhone scanning</button><button type="button" data-open="marketplace-dialog">Marketplace demo</button><a href="/upload">Delivery documents</a>
 </div>
 <div>
-<span>THE BIGGER PICTURE</span><a href="/#story">Our story</a><a href="/#team">Meet the team</a><a href="/#impact">Mission &amp; impact</a><a href="/pricing">Pricing</a>
+<span>THE BIGGER PICTURE</span><a href="/#story">Our story</a><a href="/#team">Meet the team</a><a href="/#impact">Mission &amp; impact</a><a href="#pricing">Pricing</a>
 </div>
 <div class="footer-last">
 <span>MAKE THE NEXT MOVE</span><a class="footer-contact" href="/#delivery">Across Switzerland.<br>Let’s make the next move. <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></a><span class="footer-availability"><i></i>Building our pilot community</span>

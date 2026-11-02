@@ -15,7 +15,7 @@ The server listens on `127.0.0.1:3000`. `npm run dev` enables automatic server r
 
 ## Pages
 
-- `/` — Switzerland-wide service positioning, a client planner for the user's own item and route, and a partner quote workflow; supporting scanning, listing and report concepts; mission, ESG, the five-person team and the Basel hackathon origin.
+- `/` — Switzerland-wide service positioning, visible pricing rates in the introduction and an on-page pricing section with independent delivery, report and sale calculators. Both transaction examples default to CHF 1,000, with an 8% fee of CHF 80 and CHF 920 remaining. The page also includes a client planner, partner quote workflow, supporting product concepts, ESG, the five-person team and the Basel hackathon origin.
 - `/pricing` — two separate transaction fees: **8% of the actual sold item value**, deducted from sale proceeds, and **8% of the partner's final agreed delivery price**, deducted from the delivery amount after accepted price adjustments. Independent calculators show sale proceeds and partner amount after each fee. A professional reuse report remains **CHF 5/m²**. No subscription, payment or transaction is created.
 - `/upload` — an English-language delivery-document workspace for briefs, condition photographs and site-access documents, with uploads, search, filters, downloads and deletion.
 

@@ -1,4 +1,4 @@
-import { readDeliveryOptions, readDimensions } from './delivery-options.js';
+import { readDeliveryOptions } from './delivery-options.js';
 
 // Public previews use browser memory, keeping development data off the deployment.
 export const browserPreview = document.documentElement.dataset.storage === 'browser';
@@ -30,14 +30,22 @@ export function configurePreview(page) {
     return;
   }
 
+  const description = document.querySelector('.demo-note p');
+  if (description) description.textContent = 'Prepare a delivery request for locations across Switzerland, or load the labelled example. Switch to partner view to quote or adjust the price, then return to client view to review it.';
   const consent = document.querySelector('.consent-label>span');
   if (consent) {
-    consent.textContent = 'I understand this demo brief stays in this browser session.';
+    consent.replaceChildren(document.createTextNode('I understand this brief is prepared in my browser. No partner will be contacted automatically. '));
+    const info = document.createElement('button');
+    info.type = 'button';
+    info.className = 'inline-link';
+    info.dataset.open = 'privacy-dialog';
+    info.textContent = 'About your data';
+    consent.append(info);
   }
   const success = document.querySelector('.form-success>p');
   if (success?.firstChild) success.firstChild.textContent = 'Prepared with reference ';
   const button = document.querySelector('#form-submit');
-  if (button?.firstChild) button.firstChild.textContent = 'Prepare demo brief ';
+  if (button?.firstChild) button.firstChild.textContent = 'Prepare my delivery brief ';
   const privacy = document.querySelectorAll('#privacy-dialog>p');
   if (privacy[1]) privacy[1].textContent = 'Delivery requests, partner proposals and example agreements in this public preview stay in this browser session and can be downloaded. Reloading clears the example. No contact information is sent to a carrier, no shipment is booked and no payment is taken.';
   if (privacy[2]) privacy[2].textContent = 'The upload workspace in this preview also keeps files only in browser memory, up to 200 MB per session. Reloading or closing the page clears this demo state. No analytics or third-party tracking is used.';
@@ -46,8 +54,8 @@ export function configurePreview(page) {
 export async function preparePreviewBrief(data) {
   if (data.consent !== true) throw new Error('Your confirmation is required to prepare this demo brief.');
   const id = crypto.randomUUID();
-  const record = { ...data, ...readDeliveryOptions(data), ...readDimensions(data), id, reference: `S4R-PREVIEW-${id.slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: 'browser_preview' };
-  for (const key of ['quantity', 'weight', 'pickupFloor', 'deliveryFloor']) {
+  const record = { ...data, ...readDeliveryOptions(data), id, reference: `S4R-PREVIEW-${id.slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: 'browser_preview' };
+  for (const key of ['quantity', 'length', 'width', 'height', 'weight', 'pickupFloor', 'deliveryFloor']) {
     if (record[key] !== undefined) record[key] = Number(record[key]);
   }
   if (record.service === 'doorstep') {

@@ -1,6 +1,6 @@
 # Scan4Reuse
 
-An English-language delivery demo for reusable building materials in Switzerland. A client specifies an item, route and handling needs; a logistics partner reviews the request and proposes a price or adjustments. One labelled example and a short related-tools block support the flow. The site uses Node.js and plain HTML, CSS and JavaScript, with a self-hosted PDF renderer and embedded fonts. No web framework or package installation is required to run the application.
+An English-language reuse marketplace and logistics website serving the whole of Switzerland. A client specifies an item, Swiss route, handling and placement requirements; a logistics partner reviews the request and proposes a price or adjustments. Basel-to-Zürich is a labelled example, alongside nationwide service descriptions, scanning, reporting and ESG content. The site uses Node.js and plain HTML, CSS and JavaScript, with a self-hosted PDF renderer and embedded fonts. No web framework or package installation is required to run the application.
 
 ## Run
 
@@ -15,8 +15,8 @@ The server listens on `127.0.0.1:3000`. `npm run dev` enables automatic server r
 
 ## Pages
 
-- `/` — the requested headline, one supporting sentence and primary action, then **How it works → Pricing → Delivery request → FAQ**. A single example card, a compact Related tools block and one ESG paragraph replace repeated promotional sections. The team remains in an optional FAQ. The mobile header keeps the delivery action visible. This user brief supersedes the earlier structure in `STRUCTURE_RESEARCH.md`.
-- `/pricing` — the same concise fee visual and calculators as the homepage. The item sale starts at **CHF 1,000**, delivery at **CHF 250**, and reports at **100 m²**. A sold item and the partner’s final adjusted delivery price each have their own 8% fee; reports remain **CHF 5/m²**. No subscription, payment or transaction is created.
+- `/` — introduction, how it works, services and supporting tools, pricing, impact, company/team, common questions and the client/partner delivery planner. The desktop and mobile menu uses the same order: **How it works → Services → Pricing → Impact → About us**, followed by **Plan a delivery** as the main action. Pricing stays below the introduction; both transaction calculators default to CHF 1,000, with an 8% fee of CHF 80 and CHF 920 remaining. See [STRUCTURE_RESEARCH.md](STRUCTURE_RESEARCH.md) for sources and rationale.
+- `/pricing` — two separate transaction fees: **8% of the actual sold item value**, deducted from sale proceeds, and **8% of the partner's final agreed delivery price**, deducted from the delivery amount after accepted price adjustments. Independent calculators show sale proceeds and partner amount after each fee. A professional reuse report remains **CHF 5/m²**. No subscription, payment or transaction is created.
 - `/upload` — an English-language delivery-document workspace for briefs, condition photographs and site-access documents, with uploads, search, filters, downloads and deletion.
 
 The origin story links to [Startup Weekend Basel](https://startupweekendbasel.ch/).
@@ -27,7 +27,7 @@ The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-ma
 
 Product, construction-context and team images in `public/assets/` are extracted from the supplied PDF. The five founder photographs are the original embedded photos. The case listing is rendered with HTML and the existing window icon so that its item and route match the planner.
 
-The ESG content is one short paragraph about material reuse, handling responsibilities and transparent decisions; it makes no verified savings claim. The SDG image grid is no longer rendered. Its original assets remain in the repository for provenance and reversibility.
+The impact section connects Sustainable Development Goals 8, 9, 11, 12 and 13 to logistics through short descriptions and the official [United Nations goal icons](https://sdgs.un.org/goals). The five `sdg-*.jpg` assets are hosted locally; their originals are available at `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-NN.jpg`, with `NN` matching the two-digit goal number.
 
 Team profiles preserve the user-confirmed photograph order and titles:
 
@@ -41,17 +41,13 @@ The Basel-to-Zürich journey, item specifications and CHF 120 value are illustra
 
 ## Client and logistics partner workflow
 
-The client customizes the delivery for an item. The three-step form collects its name, quantity, weight, route, handling and contact details. Dimensions and declared value are optional and progressively disclosed; missing measurements are stored as `null` and described as not provided, rather than converted to zero. Access, packaging, dates/windows, equipment and final placement remain available. Architect and facility-manager roles are supported alongside buyers, sellers and businesses.
-
-The role switcher uses tab/tablist/tabpanel semantics, arrow keys, Home/End and visible focus. Wizard steps have consistent names, a dynamic current/completed tracker and buttons for returning to completed steps. Inline errors use `aria-describedby` and `aria-invalid`, an alert summarizes failures, and focus moves to the first invalid control or new step heading. Disabled, inert hidden steps reserve layout space, and the short fade respects reduced motion.
-
-The review step shows a **mock planning estimate** and timeline. These use an illustrative local formula, are not a partner quote and are also labelled in the PDF brief. Visible TODOs cover real pricing, capacity, lead times and response times. Confirmation explains what happens next. A visible banner asks users to use sample data; the upload page warns about the shared workspace.
+The client customizes the delivery for a particular good. The three-step form collects dimensions, weight, handling service, collection readiness, packaging, site access, dates and time windows, equipment, final placement and contact details. Optional services cover assembly, temporary storage/phased delivery, unpacking, building protection, condition photos, signed handover and cover clarification. Architect and facility-manager roles are supported alongside buyers, sellers and businesses.
 
 `exampleDeliveryRequest()` in `public/partner.js` provides an optional Basel-to-Zürich case: one fragile reclaimed window, 12 × 100 × 140 cm and 18 kg, with a Basel loading bay and an occupied Zürich office. The client form starts empty for the user's own item and route. Explicit example buttons fill the case while leaving client contact details empty and consent unchecked. The partner example uses clearly labelled example contacts. Resetting the planner clears the item, route, personal data and previous quote.
 
 The logistics partner view uses the same request. A partner accepts it for review, then submits an itemised quote or explicitly proposes adjusted timing, a different service or another approach. The client can accept the example proposal or ask for a revision. Superseded and expired proposals cannot be accepted, and editing the request resets the quotation state. Both the request and proposal can be downloaded. Research informing the options is recorded in [LOGISTICS_RESEARCH.md](LOGISTICS_RESEARCH.md).
 
-The partner quote form shows the proposed delivery price, platform fee and partner amount. The fee uses the final agreed delivery price, including client-approved adjustments. Pricing explains the independent item-sale and delivery fee bases once; contextual links replace repeated explanations. The declared goods value for insurance is not treated as a completed sale. Proposals and PDF reports retain their itemised breakdown. These are pricing illustrations with no payment processing.
+The partner quote form shows the proposed delivery price, the 8% Scan4Reuse delivery transaction fee and the partner amount after that fee. The fee uses the final agreed delivery price (transport, handling and added services), including any client-approved price adjustments, and is deducted from the partner's amount. The separate 8% item-sale fee uses the actual sold item value and is deducted from sale proceeds; the declared goods value for insurance is not treated as a completed sale. Neither calculation changes the other transaction's value. Proposals and PDF reports retain the delivery breakdown and explain the separate sale fee. Amounts follow the quote's VAT basis; proceeds are before other costs and taxes. These are pricing illustrations, with no payment processing in this prototype.
 
 `POST /api/delivery-requests` validates and saves a demo brief as a private-mode JSON file under `.local/uploads/delivery-requests/`. The browser receives a reference and downloads the complete brief as a branded A4 PDF report. Requests are not exposed through a public list/read API.
 
@@ -65,9 +61,9 @@ Partner quotes and example agreements run in memory in the browser, including wh
 npm test
 ```
 
-The 24 tests cover upload/download integrity, persistence, deletion, size limits, interrupted uploads, static pages, data protection, professional requirements, optional measurements, mock estimates, consent and invalid submissions. Quotation tests cover review before quoting, requested versus adjusted scope, exact-cent totals, partner-fee rounding and PDF breakdown, price adjustments, revisions, acceptance, request edits, stale offers and expiry.
+The 21 tests cover upload/download integrity, persistence, deletion, size limits, interrupted uploads, static pages, data protection, professional delivery requirements, consent and invalid submissions. Quotation tests cover review before quoting, requested versus adjusted scope, exact-cent totals, 8% partner-fee rounding and PDF breakdown, fee recalculation after accepted price adjustments, revisions, explicit client acceptance, request edits, stale offers and expiry.
 
-Browser validation covers the Node dev server and static preview at 375px and 1280px: client and partner flows, optional measurements, PDFs, revisions/approval, uploads, keyboard Tab/Shift+Tab/arrows/Enter, wizard focus and progress, contrast, 44px controls and horizontal overflow. Verification assets stay outside Git. There is no configured lint command; syntax is checked with `node --check`. This is targeted verification, not a screen-reader or WCAG certification audit.
+Browser validation covers the client-to-partner request, quote, adjustment, revision, approval and download flow; request edits; keyboard tabs; calculators; uploads and mobile layouts at 320–1440px. The static preview makes no API mutations while using its example data. Verification assets are kept outside Git.
 
 ## Data and deployment
 

@@ -7,32 +7,6 @@ export function partnerTransactionAmounts(totalCents) {
   return { feeCents, partnerAmountCents: totalCents - feeCents };
 }
 
-export function readDimensions(data) {
-  return Object.fromEntries(['length', 'width', 'height'].map(name => {
-    const raw = data[name];
-    if (raw === undefined || raw === null || raw === '') return [name, null];
-    const value = typeof raw === 'number' || (typeof raw === 'string' && raw.trim()) ? Number(raw) : NaN;
-    if (!Number.isFinite(value) || value < 0.1 || value > 1000) throw new Error(`Please provide a valid ${name} between 0.1 and 1000 cm, or leave it blank.`);
-    return [name, value];
-  }));
-}
-
-export function describeDimensions(data) {
-  const names = ['length', 'width', 'height'];
-  const present = name => data[name] !== null && data[name] !== undefined && data[name] !== '';
-  if (names.every(present)) return `${data.length} × ${data.width} × ${data.height} cm`;
-  const known = names.filter(present).map(name => `${name[0].toUpperCase() + name.slice(1)}: ${data[name]} cm`);
-  return known.length ? `${known.join(' · ')}; other measurements not provided` : 'Not provided; partner to assess';
-}
-
-export function estimateDelivery(data) {
-  // TODO: replace this illustrative formula and timeline with real partner pricing/capacity.
-  const weight = Math.max(0, Number(data.weight) || 0) * Math.max(1, Number(data.quantity) || 1);
-  const handling = { doorstep: 0, room: 35, 'two-person': 70 }[data.service] || 0;
-  const low = Math.ceil((80 + Math.min(weight, 1000) * 0.4 + handling + (data.packaging ? 25 : 0) + (data.fragile ? 20 : 0)) / 10) * 10;
-  return { low, high: Math.ceil(low * 1.5 / 10) * 10, timeline: '2–5 working days after agreement', label: 'Mock planning estimate — not a partner quote' };
-}
-
 export function today() {
   return new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Zurich', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 }

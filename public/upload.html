@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#174c3c">
-  <meta name="description" content="Organize photos, access plans and PDF reports for reuse deliveries in Switzerland.">
-  <title>Delivery documents in Switzerland | Scan4Reuse</title>
+  <meta name="description" content="Organize photos, access plans and PDF reports for reuse deliveries across Switzerland.">
+  <title>Delivery documents across Switzerland | Scan4Reuse</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/upload.css">
   <script type="module" src="/upload.js"></script>
 </head>
-<body class="upload-ux">
+<body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5m0 6v5h-5m-6 0H4v-5m5-3 2 2 4-4"/></symbol>
     <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
@@ -44,7 +44,7 @@
       <a class="nav-item active" href="#main" aria-current="page"><svg><use href="#i-grid"/></svg><span>Delivery documents</span><span class="nav-count" id="nav-count">0</span></a>
       <button class="nav-item" id="sidebar-upload" type="button"><svg><use href="#i-upload"/></svg><span>Add files</span></button>
     </nav>
-    <div class="sidebar-note"><span class="note-icon"><svg><use href="#i-leaf"/></svg></span><div class="sidebar-note-title">One delivery.<br>Clear documents.</div><p>Photos, access plans<br>and the delivery PDF.</p><span class="note-line" aria-hidden="true"></span></div>
+    <div class="sidebar-note"><span class="note-icon"><svg><use href="#i-leaf"/></svg></span><h2>One delivery.<br>Clear documents.</h2><p>Photos, access plans<br>and the delivery PDF.</p><span class="note-line" aria-hidden="true"></span></div>
     <div class="sidebar-bottom"><button class="nav-item" id="help-button" type="button"><svg><use href="#i-info"/></svg><span>Workspace help</span><svg class="help-arrow"><use href="#i-arrow"/></svg></button><div class="space-profile"><span class="avatar">S</span><div><strong>Delivery workspace</strong><span>Switzerland</span></div><span class="online-dot" aria-label="Files stored on this instance"></span></div></div>
   </aside>
 
@@ -53,11 +53,10 @@
     <main id="main" tabindex="-1">
       <section class="page-intro" aria-labelledby="page-title"><div><div class="eyebrow"><span></span>THE DETAILS BEHIND THE MOVE</div><h1 id="page-title">Your Swiss delivery.<br><span>The documents behind it.</span></h1><p>Add item photos, site-access plans and PDF reports while preparing collection and delivery anywhere in Switzerland.</p></div><button class="button button-primary intro-upload" id="top-upload" type="button"><svg><use href="#i-plus"/></svg>Add files</button></section>
 
-<p class="workspace-warning" id="upload-privacy" role="note">Shared workspace, no accounts. Do not upload sensitive files.</p>
       <section class="upload-section" aria-label="Add delivery documents">
         <div class="drop-zone" id="drop-zone">
           <div class="upload-decoration decoration-left" aria-hidden="true"><span class="deco-dot"></span><div class="paper paper-back"><svg><use href="#i-image"/></svg><span></span><span></span></div><div class="paper paper-front"><svg><use href="#i-file"/></svg><span></span><span></span></div><svg class="deco-spark"><use href="#i-spark"/></svg></div>
-          <div class="drop-content"><span class="upload-icon"><svg><use href="#i-cloud"/></svg></span><h2>Keep the delivery details together.</h2><p>Drop photos, plans or PDFs here, or <button class="text-button" id="browse-files" type="button" aria-describedby="upload-privacy">choose files<svg><use href="#i-arrow"/></svg></button></p><div class="upload-hints"><span>Photos, access plans and PDFs</span><span class="hint-separator">·</span><span id="size-hint">Up to 50 MB per file</span></div></div>
+          <div class="drop-content"><span class="upload-icon"><svg><use href="#i-cloud"/></svg></span><h2>Keep the delivery details together.</h2><p>Drop photos, plans or PDFs here, or <button class="text-button" id="browse-files" type="button">choose files<svg><use href="#i-arrow"/></svg></button></p><div class="upload-hints"><span>Photos, access plans and PDFs</span><span class="hint-separator">·</span><span id="size-hint">Up to 50 MB per file</span></div></div>
           <div class="upload-decoration decoration-right" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="orbit-dot"></span><span class="orbit-plus">+</span></div>
           <div class="drop-overlay"><svg><use href="#i-upload"/></svg><strong>Drop the delivery files here</strong><span>Keep the request’s supporting details together.</span></div>
         </div>
@@ -68,7 +67,7 @@
       <section class="queue-section" id="queue-section" aria-labelledby="queue-title" hidden><div class="queue-header"><h2 id="queue-title">Uploads <span id="queue-summary"></span></h2><button class="text-button" id="clear-queue" type="button">Clear completed</button></div><ul id="upload-queue" class="upload-queue"></ul></section>
 
       <section class="files-section" aria-labelledby="files-title">
-        <div class="files-heading"><div><h2 id="files-title">Delivery file list <span class="file-count" id="file-count">0</span></h2><p>Photos, access details and reports for your delivery in Switzerland.</p></div><label class="search-box"><svg><use href="#i-search"/></svg><input id="search" type="search" placeholder="Search delivery files…" aria-label="Search files by name" autocomplete="off"><kbd aria-hidden="true">/</kbd></label></div>
+        <div class="files-heading"><div><h2 id="files-title">Delivery file list <span class="file-count" id="file-count">0</span></h2><p>Photos, access details and reports for your delivery across Switzerland.</p></div><label class="search-box"><svg><use href="#i-search"/></svg><input id="search" type="search" placeholder="Search delivery files…" aria-label="Search files by name" autocomplete="off"><kbd aria-hidden="true">/</kbd></label></div>
         <div class="file-toolbar"><div class="filter-tabs" role="group" aria-label="Filter files by type"><button class="filter-tab selected" type="button" data-filter="all" aria-pressed="true">All files</button><button class="filter-tab" type="button" data-filter="images" aria-pressed="false"><svg><use href="#i-image"/></svg>Photos</button><button class="filter-tab" type="button" data-filter="documents" aria-pressed="false"><svg><use href="#i-file"/></svg>Documents</button><button class="filter-tab" type="button" data-filter="other" aria-pressed="false"><svg><use href="#i-box"/></svg>Other files</button></div><div class="view-options"><label class="sort-label"><span class="sr-only">Sort files</span><select id="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="name">Name A–Z</option><option value="size">File size</option></select></label><span class="toolbar-divider"></span><div class="view-switch" role="group" aria-label="File view"><button class="icon-button selected" type="button" id="grid-view" aria-label="Grid view" aria-pressed="true"><svg><use href="#i-grid"/></svg></button><button class="icon-button" type="button" id="list-view" aria-label="List view" aria-pressed="false"><svg><use href="#i-list"/></svg></button></div></div></div>
         <div class="file-results" aria-live="polite"><p class="loading-state" id="loading-state">Loading the delivery workspace…</p><div class="empty-state" id="empty-state" hidden><div class="empty-illustration" aria-hidden="true"><div class="empty-circle"></div><svg class="empty-folder"><use href="#i-folder"/></svg><span class="empty-plus">+</span><span class="empty-star">✦</span><span class="empty-small-dot"></span></div><h3>Add the first delivery document.</h3><p>Add an item photo, a site-access plan or the PDF brief you downloaded from the delivery planner.</p><button class="button button-secondary" id="empty-upload" type="button">Add the first file<svg><use href="#i-arrow"/></svg></button></div><div class="no-results" id="no-results" hidden><svg><use href="#i-search"/></svg><h3>No files found</h3><p>Try another filename or choose a different filter.</p><button class="text-button" id="reset-filters" type="button">Show all files</button></div><div class="load-error" id="load-error" hidden><svg><use href="#i-info"/></svg><h3>The file list could not be loaded</h3><p>Check the connection and try again.</p><button class="button button-secondary" id="retry-load" type="button">Try again</button></div><ul class="file-grid" id="file-list" aria-label="Delivery files" hidden></ul></div>
         <div class="archive-summary"><span id="storage-summary">0 files · 0 B used</span><span><svg><use href="#i-check"/></svg><span id="archive-status">Ready for the first delivery file</span></span></div>

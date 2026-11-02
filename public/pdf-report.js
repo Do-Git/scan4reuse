@@ -1,4 +1,4 @@
-import { describeDimensions, equipmentNames, estimateDelivery, partnerTransactionAmounts, serviceNames } from './delivery-options.js';
+import { equipmentNames, partnerTransactionAmounts, serviceNames } from './delivery-options.js';
 
 const roleNames = { buyer: 'Buyer', seller: 'Seller', business: 'Business', architect: 'Architect / project team', 'facility-manager': 'Facility manager' };
 const categoryNames = { 'building-materials': 'Building components & materials', furniture: 'Furniture', homeware: 'Homeware & decor', electronics: 'Electronics', pallet: 'Pallet / business surplus', other: 'Other' };
@@ -18,9 +18,9 @@ export function deliveryBriefSections(request) {
       ['Client role', roleNames[request.requesterRole] || request.requesterRole], ['Listing reference', request.listingId],
       ['Service interest', { logistics: 'Connected logistics', report: 'Professional reuse report', marketplace: 'Reuse marketplace', starter: 'Reuse marketplace', pro: 'Professional reuse report', partner: 'Connected logistics' }[request.plan]],
     ]) },
-    { title: 'Your item', rows: fields([
+    { title: 'The good', rows: fields([
       ['Item', request.itemName], ['Category', categoryNames[request.category] || request.category], ['Number of items', request.quantity],
-      ['Dimensions per item', describeDimensions(request)], ['Weight per item', `${request.weight} kg`],
+      ['Dimensions per item', `${request.length} × ${request.width} × ${request.height} cm`], ['Weight per item', `${request.weight} kg`],
       ['Load format', { loose: 'Loose / individually wrapped', pallet: 'Palletised', crate: 'Crated' }[request.handlingUnit]],
       ['Collection readiness', { ready: 'Dismantled and ready', dismantling: 'Dismantling assistance requested', confirm: 'Confirm with the partner' }[request.readiness]],
       ['Fragile handling', request.fragile ? 'Extra care requested' : 'No additional fragility declared'],
@@ -46,13 +46,6 @@ export function deliveryBriefSections(request) {
       ['Client notes', text(request.notes)],
     ] },
   ];
-  const estimate = estimateDelivery(request);
-  sections.push({ title: 'Mock planning estimate', rows: [
-    ['Illustrative price range', `${money(estimate.low)}–${money(estimate.high)}`],
-    ['Illustrative timeline', estimate.timeline],
-    ['Status', `${estimate.label}. No booking or payment.`],
-    ['TODO', 'Confirm actual pricing, availability and timing with a logistics partner.'],
-  ] });
   return sections;
 }
 

@@ -192,21 +192,6 @@ test('delivery requirements adapt to pallets and doorstep delivery; untrusted fi
   assert.equal(request.pickupFloor, undefined);
 });
 
-test('unknown dimensions are optional, while supplied measurements remain validated', async t => {
-  const { base } = await fixture(t);
-  for (const dimensions of [{ length: '', width: '', height: '' }, { length: undefined, width: undefined, height: undefined }, { length: '90', width: '', height: '' }]) {
-    const response = await fetch(`${base}/api/delivery-requests`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...validBrief, ...dimensions }) });
-    assert.equal(response.status, 201);
-    const { request } = await response.json();
-    assert.equal(request.length, dimensions.length ? 90 : null);
-    assert.equal(request.width, null);
-    assert.equal(request.height, null);
-    assert.equal(request.declaredValue, null);
-  }
-  const invalid = await fetch(`${base}/api/delivery-requests`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...validBrief, length: 1001 }) });
-  assert.equal(invalid.status, 400);
-});
-
 test('architect and facility requests retain site, timing and service requirements with strict validation', async t => {
   const { base } = await fixture(t);
   for (const requesterRole of ['architect', 'facility-manager']) {

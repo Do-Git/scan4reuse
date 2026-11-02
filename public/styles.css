@@ -160,7 +160,7 @@ fieldset { margin: 0; padding: 0; border: 0; }legend { padding: 0; margin-bottom
 @media (prefers-reduced-motion: reduce) { :root { scroll-behavior: auto; }*,*:before,*:after { transition: none !important; animation: none !important; } }
 .hero-annotation .annotation-arrow .icon { width: 28px; height: 28px; }
 
-/* Startup website: logistics first, with the deck content supporting the story. */
+/* Startup website: logistics first, with supporting product concepts. */
 :root {
   --paper: #fbfcf8;
   --ink: #213e2d;
@@ -281,14 +281,14 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
 .purpose-grid { border-color: #d9e3cd; }
 .purpose-grid h3 { font-weight: 450; font-size: 25px; }
 .purpose-grid p { color: #7f9270; }
-.deck-context { border: 1px solid #d7e3c9; border-radius: 8px; background: #f7faf1; margin: 25px 0 0; }
-.deck-context summary { list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 15px; color: #67814f; font-size: 12px; }
-.deck-context summary::-webkit-details-marker, .discovery-note summary::-webkit-details-marker { display: none; }
-.deck-context summary>span { display: flex; align-items: center; gap: 10px; }
-.deck-context summary .icon { width: 17px; height: 17px; }
-.deck-context[open] summary>.icon { transform: rotate(45deg); }
-.deck-context>div { padding: 0 18px 6px; max-width: 1020px; }
-.deck-context p { color: #7c9070; font-size: 11px; line-height: 1.9; }
+.construction-context { border: 1px solid #d7e3c9; border-radius: 8px; background: #f7faf1; margin: 25px 0 0; }
+.construction-context summary { list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 15px; color: #67814f; font-size: 12px; }
+.construction-context summary::-webkit-details-marker, .discovery-note summary::-webkit-details-marker { display: none; }
+.construction-context summary>span { display: flex; align-items: center; gap: 10px; }
+.construction-context summary .icon { width: 17px; height: 17px; }
+.construction-context[open] summary>.icon { transform: rotate(45deg); }
+.construction-context>div { padding: 0 18px 6px; max-width: 1020px; }
+.construction-context p { color: #7c9070; font-size: 11px; line-height: 1.9; }
 .esg-header h3 { font-weight: 500; }
 .esg-header>span { color: #8aa177; }
 .esg-grid>article+article { border-color: #d6e3c7; }
@@ -513,9 +513,9 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
   .report-image { margin-top: 25px; height: 275px; }
   .report-card>.concept-label { margin-top: 21px; }
   .purpose-grid h3 { font-size: 25px; }
-  .deck-context summary { font-size: 11px; padding: 15px; }
-  .deck-context>div { padding-inline: 15px; }
-  .deck-context p { font-size: 11px; }
+  .construction-context summary { font-size: 11px; padding: 15px; }
+  .construction-context>div { padding-inline: 15px; }
+  .construction-context p { font-size: 11px; }
   .discovery-note summary { font-size: 10px; }
   .discovery-note p { font-size: 11px; }
   .team-card h3 { font-size: 16px; }
@@ -565,7 +565,7 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
   .hero-copy>p:not(.hero-tagline), .section-heading>p, .step-card p,
   .logistics-inner>div>p, .feature-list, .delivery-intro>p, .delivery-promises,
   .form-description, .form-success>p, .showcase-card p, .purpose-grid p,
-  .deck-context p, .esg-grid p, .esg-grid .esg-goal, .sdg-heading p, .sdg-card p,
+  .construction-context p, .esg-grid p, .esg-grid .esg-goal, .sdg-heading p, .sdg-card p,
   .story-copy p, .discovery-note p, .discovery-note blockquote,
   .modal>p, .demo-listing p, .scanner-steps p, .pricing-intro>p,
   .price-card>p, .price-card li, .billing-description, .price>span, .faq-list p {
@@ -601,7 +601,7 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
   .shipment-bottom .button, .step-card .text-link, .logistics-inner .button, .demo-listing .button,
   .form-actions .button, .showcase-card .text-link, .price-card>.button,
   .price-card>.text-link, .estimate-card .text-link, .pricing-cta .button,
-  .use-example, .deck-context summary, .discovery-note summary,
+  .use-example, .construction-context summary, .discovery-note summary,
   .faq-list summary, .mobile-menu a, .footer-links a, .footer-links button {
     font-size: 16px; line-height: 1.5;
   }

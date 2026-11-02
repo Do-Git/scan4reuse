@@ -28,7 +28,6 @@
 <h1 id="hero-title">Reuse.<br>Across Switzerland.<br><span class="hero-highlight">Delivered.</span>
 </h1>
 <p>Buy and sell reusable materials across Switzerland. Customize the delivery you need, then connect with a logistics partner to agree collection, handling, placement and the final price.</p>
-<div class="hero-pricing" aria-label="Scan4Reuse pricing"><div><strong>8%</strong><span>Item-sale fee</span></div><div><strong>8%</strong><span>Partner delivery fee</span></div><div><strong>CHF 5</strong><span>Report per m²</span></div></div>
 <div class="hero-actions">
 <a class="button button-dark" href="#delivery">Plan a delivery <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></a><a class="plain-link" href="#how-it-works">How the platform works <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow"></use></svg></a>
 </div>
@@ -76,15 +75,6 @@
 <span class="strip-connector">→</span><div>
 <svg class="icon" aria-hidden="true"><use href="/icons.svg#leaf"></use></svg>Deliver</div>
 </div></section>
-
-    <section class="section wrap home-pricing" id="pricing" aria-labelledby="home-pricing-title">
-<div class="section-heading"><div><span class="eyebrow">OUR PRICING · ACROSS SWITZERLAND</span><h2 id="home-pricing-title">Clear pricing.<br><em>For every transaction.</em></h2></div><p>The sale and delivery fees each use their own transaction value. See the rates and calculate seller proceeds, the partner amount or a report estimate here.</p></div>
-<div class="estimator-grid">
-<article class="estimate-card home-price-card partner-estimate"><span class="small-label">01 / LOGISTICS PARTNER</span><h3>Final delivery price. Partner amount.</h3><div class="home-price-rate">8<span>%</span></div><p>Deducted from the logistics partner’s final agreed delivery price, including any client-approved adjustments.</p><label for="delivery-value">Final delivery price, after adjustments (CHF)<input id="delivery-value" type="number" min="0" max="100000000" step="0.01" value="1000" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Delivery transaction fee · 8%</span><output id="partner-fee-estimate" for="delivery-value">CHF 80.00</output></div><div class="seller-net" aria-live="polite"><span>Partner amount after fee</span><output id="partner-amount-estimate" for="delivery-value">CHF 920.00</output></div></article>
-<article class="estimate-card home-price-card"><span class="small-label">02 / PROFESSIONAL REUSE REPORT</span><h3>Your site. A report estimate.</h3><div class="home-price-rate">CHF 5<span> / m²</span></div><p>A professional reuse report is priced per square metre of surveyed area.</p><label for="report-area">Surveyed area (m²)<input id="report-area" type="number" min="0" max="1000000" step="0.1" value="100" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Area × CHF 5 / m²</span><output id="report-estimate" for="report-area">CHF 500.00</output></div><button class="text-link" type="button" data-open="report-dialog">View the sample report <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></button></article>
-<article class="estimate-card home-price-card"><span class="small-label">03 / MARKETPLACE SALE</span><h3>Sold item value. Seller proceeds.</h3><div class="home-price-rate">8<span>%</span></div><p>Deducted from the actual sold item transaction. The seller receives the sale proceeds after the fee.</p><label for="sale-value">Final sold item value (CHF)<input id="sale-value" type="number" min="0" max="100000000" step="0.01" value="1000" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Item-sale transaction fee · 8%</span><output id="commission-estimate" for="sale-value">CHF 80.00</output></div><div class="seller-net" aria-live="polite"><span>Seller proceeds after fee</span><output id="seller-estimate" for="sale-value">CHF 920.00</output></div></article>
-</div><p class="home-pricing-footnote">Examples are illustrative. Seller proceeds and partner amounts are before other costs and taxes. Each 8% fee applies to its own transaction value. There is no monthly subscription.</p>
-</section>
 
     <section class="section wrap" id="how-it-works" aria-labelledby="how-title"><div class="section-heading">
 <div>
@@ -356,6 +346,15 @@
 <div class="report-image"><img src="/assets/report.png" width="830" height="1168" alt="Sample reuse report, visibly marked SAMPLE DATA" loading="lazy"></div>
 <span class="concept-label">Example report · sample figures are estimates, not verified project results</span></article>
 </div></section>
+
+    <section class="section wrap home-pricing" id="pricing" aria-labelledby="home-pricing-title">
+<div class="section-heading"><div><span class="eyebrow">OUR PRICING · ACROSS SWITZERLAND</span><h2 id="home-pricing-title">Clear pricing.<br><em>For every transaction.</em></h2></div><p>The sale and delivery fees each use their own transaction value. See the rates and calculate seller proceeds, the partner amount or a report estimate here.</p></div>
+<div class="estimator-grid">
+<article class="estimate-card home-price-card partner-estimate"><span class="small-label">01 / LOGISTICS PARTNER</span><h3>Final delivery price. Partner amount.</h3><div class="home-price-rate">8<span>%</span></div><p>Deducted from the logistics partner’s final agreed delivery price, including any client-approved adjustments.</p><label for="delivery-value">Final delivery price, after adjustments (CHF)<input id="delivery-value" type="number" min="0" max="100000000" step="0.01" value="1000" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Delivery transaction fee · 8%</span><output id="partner-fee-estimate" for="delivery-value">CHF 80.00</output></div><div class="seller-net" aria-live="polite"><span>Partner amount after fee</span><output id="partner-amount-estimate" for="delivery-value">CHF 920.00</output></div></article>
+<article class="estimate-card home-price-card"><span class="small-label">02 / PROFESSIONAL REUSE REPORT</span><h3>Your site. A report estimate.</h3><div class="home-price-rate">CHF 5<span> / m²</span></div><p>A professional reuse report is priced per square metre of surveyed area.</p><label for="report-area">Surveyed area (m²)<input id="report-area" type="number" min="0" max="1000000" step="0.1" value="100" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Area × CHF 5 / m²</span><output id="report-estimate" for="report-area">CHF 500.00</output></div><button class="text-link" type="button" data-open="report-dialog">View the sample report <svg class="icon" aria-hidden="true"><use href="/icons.svg#arrow-up"></use></svg></button></article>
+<article class="estimate-card home-price-card"><span class="small-label">03 / MARKETPLACE SALE</span><h3>Sold item value. Seller proceeds.</h3><div class="home-price-rate">8<span>%</span></div><p>Deducted from the actual sold item transaction. The seller receives the sale proceeds after the fee.</p><label for="sale-value">Final sold item value (CHF)<input id="sale-value" type="number" min="0" max="100000000" step="0.01" value="1000" inputmode="decimal"></label><div class="estimate-result" aria-live="polite"><span>Item-sale transaction fee · 8%</span><output id="commission-estimate" for="sale-value">CHF 80.00</output></div><div class="seller-net" aria-live="polite"><span>Seller proceeds after fee</span><output id="seller-estimate" for="sale-value">CHF 920.00</output></div></article>
+</div><p class="home-pricing-footnote">Examples are illustrative. Seller proceeds and partner amounts are before other costs and taxes. Each 8% fee applies to its own transaction value. There is no monthly subscription.</p>
+</section>
 
     <section class="impact-section" id="impact" aria-labelledby="impact-title"><div class="wrap">
 <div class="section-heading">

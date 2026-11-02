@@ -49,14 +49,16 @@ function quoteSummary(quote, request) {
     prices.append(element('dt', label), element('dd', money(amount / 100)));
   }
   container.append(prices);
-  container.append(element('p', 'Scan4Reuse deducts 8% from the logistics partner’s final agreed delivery price, including accepted adjustments. The separate item-sale fee is 8% of the sold item value, deducted from the sale proceeds.', 'exchange-note'));
+  const pricing = element('a', 'See transaction fees in Pricing', 'inline-link');
+  pricing.href = '#pricing';
+  container.append(pricing);
   container.append(element('p', `VAT: ${{ included: 'included', excluded: 'excluded', confirm: 'to be confirmed' }[quote.taxBasis]}. Quote valid until ${quote.validUntil}.`));
   if (quote.crewEquipment) container.append(element('p', `Crew and equipment: ${quote.crewEquipment}`));
   container.append(element('strong', 'Included services and conditions'), element('p', quote.scope, 'proposal-scope'));
   return container;
 }
 
-export function createPartnerWorkspace({ describeBrief, onExample }) {
+export function createPartnerWorkspace({ describeBrief, onExample, validateForm, clearValidation, showFieldError }) {
   const $ = selector => document.querySelector(selector);
   const form = $('#partner-quote-form');
   const exchange = new DeliveryExchange();
@@ -71,11 +73,12 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
       $(`#${tab.getAttribute('aria-controls')}`).hidden = !selected;
       if (selected && focus) tab.focus({ preventScroll: true });
     }
-    if (focus) $('#delivery').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (focus) $('#delivery').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   }
 
   function resetQuoteForm() {
     form.reset();
+    clearValidation(form);
     form.elements.validUntil.min = today();
     form.elements.validUntil.value = afterDays(7);
     form.elements.proposedPickupDate.min = today();
@@ -119,7 +122,7 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     $('#partner-proposal-status').textContent = stage === 'agreed' ? 'The client has accepted the scope and price in this example.' : 'The client can accept the proposal or ask for a revision.';
     if (proposal) {
       const { feeCents, partnerAmountCents } = partnerTransactionAmounts(proposal.totalCents);
-      for (const [label, amount] of [[stage === 'agreed' ? 'Final agreed delivery price' : 'Proposed delivery price', proposal.totalCents], ['Delivery transaction fee · 8%', feeCents], ['Partner amount after fee', partnerAmountCents]]) {
+      for (const [label, amount] of [[stage === 'agreed' ? 'Final agreed delivery price' : 'Proposed delivery price', proposal.totalCents], ['Platform fee', feeCents], ['Partner amount after fee', partnerAmountCents]]) {
         partnerSummary.append(element('dt', label), element('dd', money(amount / 100)));
       }
     }
@@ -171,7 +174,7 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
   });
   form.addEventListener('submit', event => {
     event.preventDefault();
-    if (!form.reportValidity()) return;
+    if (!validateForm(form, $('#partner-quote-error'))) return;
     const values = {};
     for (const field of form.elements) if (field.name && !field.disabled) values[field.name] = field.type === 'checkbox' ? field.checked : field.value;
     try {
@@ -182,11 +185,16 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     } catch (error) {
       $('#partner-quote-error').textContent = error.message;
       $('#partner-quote-error').hidden = false;
+      const field = /total greater than zero/.test(error.message) ? form.elements.transport : form.elements.changes;
+      if (field && !field.closest('[hidden]')) { showFieldError(field, error.message); field.focus(); }
+      else $('#partner-quote-error').focus();
     }
   });
   $('#request-revision').addEventListener('click', () => {
     try {
       exchange.revise($('#revision-reason').value);
+      $('#revision-reason').removeAttribute('aria-invalid');
+      $('#revision-reason').removeAttribute('aria-describedby');
       form.elements.requirementsReviewed.checked = false;
       $('#revision-reason').value = '';
       render();
@@ -194,7 +202,15 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     } catch (error) {
       $('#client-exchange-error').textContent = error.message;
       $('#client-exchange-error').hidden = false;
+      const field = $('#revision-reason');
+      field.setAttribute('aria-invalid', 'true');
+      field.setAttribute('aria-describedby', 'client-exchange-error');
+      field.focus();
     }
+  });
+  $('#revision-reason').addEventListener('input', event => {
+    event.target.removeAttribute('aria-invalid');
+    event.target.removeAttribute('aria-describedby');
   });
   $('#accept-quote').addEventListener('click', () => {
     try { exchange.accept($('#accept-quote').dataset.proposalId); render(); }

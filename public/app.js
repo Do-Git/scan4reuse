@@ -1,5 +1,5 @@
 import { browserPreview, configurePreview, preparePreviewBrief } from './preview.js';
-import { describeDeliveryOptions, partnerTransactionAmounts, readDeliveryOptions } from './delivery-options.js';
+import { describeDeliveryOptions, describeDimensions, estimateDelivery, partnerTransactionAmounts, readDeliveryOptions, readDimensions } from './delivery-options.js';
 import { createPartnerWorkspace, exampleDeliveryRequest } from './partner.js';
 import { downloadDeliveryBriefPdf } from './pdf-report.js';
 
@@ -8,6 +8,83 @@ const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const menu = $('#mobile-menu');
 const toggle = $('.menu-toggle');
+const stepNames = ['The object', 'The journey', 'Your details'];
+const scrollTo = element => element.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+
+function clearFieldError(field) {
+  field.removeAttribute('aria-invalid');
+  const error = document.getElementById(`${field.id}-error`);
+  if (error) { error.hidden = true; error.textContent = ''; }
+  const descriptions = (field.getAttribute('aria-describedby') || '').split(/\s+/).filter(id => id && id !== `${field.id}-error`);
+  if (descriptions.length) field.setAttribute('aria-describedby', descriptions.join(' '));
+  else field.removeAttribute('aria-describedby');
+}
+
+function showFieldError(field, message) {
+  const error = document.getElementById(`${field.id}-error`);
+  if (!error) return;
+  error.textContent = message;
+  error.hidden = false;
+  field.setAttribute('aria-invalid', 'true');
+  const descriptions = new Set((field.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+  descriptions.add(error.id);
+  field.setAttribute('aria-describedby', [...descriptions].join(' '));
+}
+
+function fieldMessage(field) {
+  const caption = document.getElementById(field.getAttribute('aria-labelledby'))?.textContent.trim() || field.name;
+  if (field.validity.valueMissing || (field.required && field.type !== 'checkbox' && !field.value.trim())) return field.type === 'checkbox' ? 'Select this confirmation to continue.' : `Please enter ${caption.toLowerCase()}.`;
+  if (field.validity.typeMismatch || field.validity.patternMismatch) return 'Enter an email address such as name@example.com.';
+  if (field.validity.rangeUnderflow) return field.type === 'date' ? `Choose a date on or after ${field.min}.` : `Use a value of at least ${field.min}.`;
+  if (field.validity.rangeOverflow) return `Use a value no greater than ${field.max}.`;
+  if (field.validity.stepMismatch) return `Use increments of ${field.step}.`;
+  return field.validationMessage || `Please check ${caption.toLowerCase()}.`;
+}
+
+function setupValidation(target) {
+  for (const field of target.querySelectorAll('input:not([type="hidden"]), select, textarea')) {
+    field.id ||= `${target.id}-${field.name}`;
+    const label = field.closest('label');
+    if (!label) continue;
+    label.htmlFor = field.id;
+    let caption = [...label.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+    if (caption) { const span = document.createElement('span'); span.textContent = caption.textContent; caption.replaceWith(span); caption = span; }
+    else caption = [...label.children].find(child => child !== field && child.tagName === 'SPAN');
+    if (caption) { caption.id ||= `${field.id}-label`; field.setAttribute('aria-labelledby', caption.id); }
+    const error = document.createElement('span');
+    error.id = `${field.id}-error`; error.className = 'field-error'; error.hidden = true;
+    label.append(error);
+    for (const event of ['input', 'change']) field.addEventListener(event, () => {
+      if (field.getAttribute('aria-invalid') !== 'true') return;
+      clearFieldError(field);
+      if (!field.checkValidity() || (field.required && field.type !== 'checkbox' && !field.value.trim())) showFieldError(field, fieldMessage(field));
+      if (!target.querySelector('[aria-invalid="true"]')) {
+        const summary = target.querySelector('[role="alert"]');
+        if (summary) summary.hidden = true;
+      }
+    });
+  }
+}
+
+function clearValidation(target) {
+  target.querySelectorAll('[aria-invalid]').forEach(clearFieldError);
+}
+
+function validateForm(target, summary, scope = target) {
+  const fields = [...scope.querySelectorAll('input, select, textarea')].filter(field => field.willValidate && !field.closest('[hidden]'));
+  const invalid = fields.filter(field => !field.checkValidity() || (field.required && field.type !== 'checkbox' && !field.value.trim()));
+  fields.forEach(clearFieldError);
+  invalid.forEach(field => {
+    field.closest('details')?.setAttribute('open', '');
+    showFieldError(field, fieldMessage(field));
+  });
+  summary.hidden = !invalid.length;
+  if (!invalid.length) return true;
+  summary.textContent = `Please check ${invalid.length === 1 ? 'the highlighted field' : `the ${invalid.length} highlighted fields`}. ${fieldMessage(invalid[0])}`;
+  invalid[0].focus({ preventScroll: true });
+  invalid[0].scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  return false;
+}
 
 function closeMenu() {
   menu.hidden = true;
@@ -21,7 +98,9 @@ toggle.addEventListener('click', () => {
   toggle.setAttribute('aria-label', menu.hidden ? 'Open navigation' : 'Close navigation');
 });
 $$('#mobile-menu a').forEach(link => link.addEventListener('click', closeMenu));
-document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !menu.hidden) { closeMenu(); toggle.focus(); }
+});
 document.addEventListener('click', event => { if (!event.target.closest('.site-header')) closeMenu(); });
 $$('[data-year]').forEach(node => { node.textContent = new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'Europe/Zurich' }).format(new Date()); });
 
@@ -64,7 +143,8 @@ let step = 0;
 let savedBrief = null;
 let selectedPlan = 'none';
 let selectedBilling = 'monthly';
-const exchange = form ? createPartnerWorkspace({ describeBrief, onExample: loadExampleRequest }) : null;
+if (form) { setupValidation(form); setupValidation($('#partner-quote-form')); }
+const exchange = form ? createPartnerWorkspace({ describeBrief, onExample: loadExampleRequest, validateForm, clearValidation, showFieldError }) : null;
 
 function loadExampleRequest(request) {
   for (const field of form.elements) {
@@ -96,19 +176,19 @@ function fillExample(focus = true) {
   $('#access-fields').hidden = example.service === 'doorstep';
   form.elements.namedItem('deliveryDate').min = example.pickupDate;
   updateCategory();
-  goToStep(0);
-  if (focus) form.elements.namedItem('itemName').focus({ preventScroll: true });
+  clearValidation(form);
+  goToStep(0, Boolean(focus));
 }
 
-$('#use-demo-listing').addEventListener('click', () => {
+$('#use-demo-listing')?.addEventListener('click', () => {
   $('#marketplace-dialog').close();
   fillExample();
-  if (form) $('#delivery').scrollIntoView({ behavior: 'smooth' });
+  if (form) scrollTo($('#delivery'));
 });
 
 $$('[data-use-example]').forEach(button => button.addEventListener('click', () => {
   fillExample();
-  if (form) $('#delivery').scrollIntoView({ behavior: 'smooth' });
+  if (form) scrollTo($('#delivery'));
 }));
 
 function node(tag, text) {
@@ -133,7 +213,7 @@ function describeBrief(data) {
   if (data.category === 'pallet' && data.forklift) extras.push('Forklift at pickup');
   const parts = [
     `${data.quantity} × ${data.itemName}`,
-    `${data.length} × ${data.width} × ${data.height} cm · ${data.weight} kg per item`,
+    `Dimensions: ${describeDimensions(data)} · ${data.weight} kg per item`,
     `${data.pickup} → ${data.destination}`,
     `Preferred pickup: ${data.pickupDate} · ${labels[data.service]}`,
   ];
@@ -162,19 +242,19 @@ function completeRequest(request) {
 }
 
 function validateStep() {
-  const fields = [...form.querySelectorAll(`[data-step="${step}"] input, [data-step="${step}"] select, [data-step="${step}"] textarea`)];
-  for (const field of fields) {
-    if (!field.disabled && !field.closest('[hidden]') && !field.checkValidity()) {
-      const details = field.closest('details');
-      if (details) details.open = true;
-      field.reportValidity(); return false;
-    }
+  if (!validateForm(form, $('#form-error'), form.querySelector(`[data-step="${step}"]`))) return false;
+  try {
+    if (step === 0) readDimensions(values());
+    if (step === 1) readDeliveryOptions(values());
   }
-  if (step === 1) {
-    try { readDeliveryOptions(values()); }
-    catch (error) { $('#form-error').textContent = error.message; $('#form-error').hidden = false; return false; }
-  }
+  catch (error) { $('#form-error').textContent = error.message; $('#form-error').hidden = false; $('#form-error').focus(); return false; }
   return true;
+}
+
+function renderEstimate() {
+  const estimate = estimateDelivery(values());
+  $('#estimated-price').textContent = `${currency(estimate.low)}–${currency(estimate.high)}`;
+  $('#estimated-timeline').textContent = estimate.timeline;
 }
 
 function goToStep(next, focus = false) {
@@ -183,26 +263,31 @@ function goToStep(next, focus = false) {
     const active = Number(fieldset.dataset.step) === step;
     fieldset.hidden = !active;
     fieldset.disabled = !active;
+    fieldset.inert = !active;
+    fieldset.setAttribute('aria-hidden', String(!active));
   });
   $$('[data-step-indicator]').forEach(indicator => {
     const index = Number(indicator.dataset.stepIndicator);
     indicator.classList.toggle('current', index === step);
     indicator.classList.toggle('complete', index < step);
+    indicator.querySelector('[data-step-icon]').textContent = index < step ? '✓' : String(index + 1);
+    const button = indicator.querySelector('button');
+    button.disabled = index > step;
+    button.setAttribute('aria-label', index < step ? `Completed. Go back to step ${index + 1}: ${stepNames[index]}` : `Step ${index + 1} of 3: ${stepNames[index]}`);
     if (index === step) indicator.setAttribute('aria-current', 'step');
     else indicator.removeAttribute('aria-current');
   });
   $('#form-back').hidden = step === 0;
   $('#form-next').hidden = step === 2;
   $('#form-submit').hidden = step !== 2;
-  $('#step-caption').textContent = `STEP 0${step + 1} OF 03`;
-  $('#form-next').firstChild.textContent = step === 0 ? 'The journey ' : 'Your details ';
+  $('#step-caption').textContent = `Step ${step + 1} of 3 · ${stepNames[step]}`;
+  $('#form-next').firstChild.textContent = `Next: ${stepNames[step + 1] || 'Review'} `;
   $('#form-error').hidden = true;
-  if (step === 2) renderBrief($('#brief-preview'), values());
+  if (step === 2) { renderBrief($('#brief-preview'), values()); renderEstimate(); }
   if (focus) {
-    const legend = form.querySelector(`[data-step="${step}"] legend`);
-    legend.tabIndex = -1;
-    legend.focus({ preventScroll: true });
-    if (window.innerWidth < 721) $('.delivery-planner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const heading = form.querySelector(`[data-step="${step}"] [data-step-heading]`);
+    heading.focus({ preventScroll: true });
+    scrollTo($('.delivery-planner'));
   }
 }
 
@@ -222,6 +307,7 @@ function updateCategory() {
 
 function resetPlanner() {
   form.reset();
+  clearValidation(form);
   exchange.clear();
   savedBrief = null;
   form.hidden = false;
@@ -230,7 +316,7 @@ function resetPlanner() {
   updateCategory();
   $('#access-fields').hidden = true;
   form.elements.namedItem('deliveryDate').min = form.elements.namedItem('pickupDate').min;
-  goToStep(0);
+  goToStep(0, true);
 }
 
 if (form) {
@@ -245,11 +331,16 @@ if (form) {
   $('#fill-example').addEventListener('click', fillExample);
   $('#form-next').addEventListener('click', () => { if (validateStep()) goToStep(step + 1, true); });
   $('#form-back').addEventListener('click', () => goToStep(step - 1, true));
+  $$('[data-step-target]').forEach(button => button.addEventListener('click', () => {
+    const target = Number(button.dataset.stepTarget);
+    if (target <= step) goToStep(target, true);
+  }));
   form.elements.namedItem('category').addEventListener('change', event => {
     if (event.target.value === 'electronics') form.elements.namedItem('fragile').checked = true;
     updateCategory();
   });
   form.elements.namedItem('service').addEventListener('change', event => { $('#access-fields').hidden = event.target.value === 'doorstep'; });
+  goToStep(0);
   if (['demo-window', 'demo-chair', 'basel-zurich-window'].includes(params.get('item'))) fillExample(false);
 
   form.addEventListener('submit', async event => {
@@ -270,13 +361,14 @@ if (form) {
       }
       completeRequest(data.request);
       $('#form-success').focus({ preventScroll: true });
-      $('.delivery-planner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollTo($('.delivery-planner'));
     } catch (error) {
       $('#form-error').textContent = error instanceof TypeError ? 'We couldn’t reach the server. Your details are still here — please try again.' : error.message;
       $('#form-error').hidden = false;
+      $('#form-error').focus();
     } finally {
       button.disabled = false;
-      button.firstChild.textContent = browserPreview ? 'Prepare my delivery brief ' : 'Save my delivery brief ';
+      button.firstChild.textContent = browserPreview ? 'Prepare demo brief ' : 'Save demo brief ';
     }
   });
 

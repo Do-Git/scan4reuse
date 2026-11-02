@@ -1,11 +1,35 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DeliveryExchange, partnerTransactionAmounts, readDeliveryOptions, validatePartnerQuote } from '../public/delivery-options.js';
-import { partnerProposalSections } from '../public/pdf-report.js';
+import { DeliveryExchange, describeDimensions, estimateDelivery, partnerTransactionAmounts, readDeliveryOptions, readDimensions, validatePartnerQuote } from '../public/delivery-options.js';
+import { deliveryBriefSections, partnerProposalSections } from '../public/pdf-report.js';
 
 const request = { id: 'request-one', pickupDate: '2099-11-10', deliveryDate: '2099-11-11', service: 'room', deliveryWindow: '17:00–19:00', pickupAccess: 'Bay B' };
 const currentDay = '2099-11-01';
 const quote = { partnerName: 'Example logistics partner', mode: 'as-requested', transport: '180.10', handling: '50.20', extras: '20', taxBasis: 'included', validUntil: '2099-11-09', requirementsReviewed: true, scope: 'Two-person handling, protection and final placement.' };
+
+test('optional measurements are explicit in summaries and PDF reports', () => {
+  const empty = readDimensions({ length: '', width: null });
+  assert.deepEqual(empty, { length: null, width: null, height: null });
+  assert.equal(describeDimensions(empty), 'Not provided; partner to assess');
+  assert.equal(describeDimensions(readDimensions({ length: '12', width: 100, height: '140' })), '12 × 100 × 140 cm');
+  assert.match(describeDimensions(readDimensions({ width: '90' })), /Width: 90 cm; other measurements not provided/);
+  for (const length of [0, -1, 1001, Infinity, 'NaN', ' ', {}]) assert.throws(() => readDimensions({ length }));
+  const sections = deliveryBriefSections({ ...request, ...empty, weight: 18, quantity: 1 });
+  const dimensions = sections.find(section => section.title === 'Your item').rows.find(([label]) => label === 'Dimensions per item')[1];
+  assert.equal(dimensions, 'Not provided; partner to assess');
+  const estimate = sections.find(section => section.title === 'Mock planning estimate');
+  assert.match(estimate.rows.find(([label]) => label === 'Status')[1], /not a partner quote/);
+  assert(estimate.rows.some(([label]) => label === 'TODO'));
+});
+
+test('planning estimates are explicitly mock ranges and reflect requested handling', () => {
+  const basic = estimateDelivery({ quantity: 1, weight: 18, service: 'doorstep' });
+  const handling = estimateDelivery({ quantity: 1, weight: 18, service: 'two-person', packaging: true });
+  assert(Number.isFinite(basic.low) && basic.low > 0 && basic.high > basic.low);
+  assert(handling.low > basic.low);
+  assert.match(basic.label, /Mock.*not a partner quote/);
+  assert.match(basic.timeline, /working days after agreement/);
+});
 
 test('the 8% partner transaction fee rounds to cents and leaves the client quote total unchanged', () => {
   for (const [totalCents, feeCents, partnerAmountCents] of [[0, 0, 0], [1, 0, 1], [6, 0, 6], [7, 1, 6], [30, 2, 28], [100000, 8000, 92000], [25030, 2002, 23028], [2999999997, 240000000, 2759999997]]) {

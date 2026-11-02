@@ -1,7 +1,7 @@
 import { mkdir, open, rename, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { readDeliveryOptions } from './public/delivery-options.js';
+import { readDeliveryOptions, readDimensions } from './public/delivery-options.js';
 
 export class DeliveryError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -46,9 +46,6 @@ export function validateDelivery(data) {
     itemName: text(data, 'itemName', 120),
     category,
     quantity: number(data, 'quantity', 1, 100, true),
-    length: number(data, 'length', 0.1, 1000),
-    width: number(data, 'width', 0.1, 1000),
-    height: number(data, 'height', 0.1, 1000),
     weight: number(data, 'weight', 0.1, 10000),
     fragile: data.fragile === true,
     pickup: text(data, 'pickup', 200),
@@ -72,7 +69,7 @@ export function validateDelivery(data) {
     brief.pickupLift = data.pickupLift === true;
     brief.deliveryLift = data.deliveryLift === true;
   }
-  try { Object.assign(brief, readDeliveryOptions(data)); }
+  try { Object.assign(brief, readDeliveryOptions(data), readDimensions(data)); }
   catch (error) { throw new DeliveryError(400, error.message); }
   return brief;
 }

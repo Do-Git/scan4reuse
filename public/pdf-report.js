@@ -72,10 +72,11 @@ export function partnerProposalSections(request, proposal, stage) {
     ] },
     { title: 'Logistics partner transaction fee', rows: [
       ['Fee paid by', 'The logistics partner, on each completed delivery transaction'],
-      ['Fee basis', '8% of the agreed delivery total: transport, handling and added services'],
+      ['Fee basis', '8% of the final agreed delivery price after any client-approved adjustments: transport, handling and added services'],
       ['Scan4Reuse fee · 8%', money(feeCents / 100)],
       ['Partner amount after fee', `${money(partnerAmountCents / 100)} before the partner’s own costs and taxes`],
-      ['Client quote', 'The fee comes from the partner’s delivery total. No additional 8% is added to the client quote.'],
+      ['Client quote', 'The delivery fee is deducted from the partner’s final agreed delivery price.'],
+      ['Separate item-sale fee', '8% of the sold item transaction value, deducted from the sale proceeds. This fee uses the item sale value, independently of the delivery price.'],
     ] },
   ];
   return [...quoteSections, ...deliveryBriefSections(request).map(section => ({ ...section, title: `Client requirements · ${section.title}` }))];

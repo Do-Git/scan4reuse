@@ -2,7 +2,9 @@
 
 The logistics flow has two sides: a client specifies the delivery for a particular good, and a logistics partner accepts the request for review, quotes it or proposes changes. The client reviews the scope and price before accepting. The deployed static preview demonstrates both roles in one browser session.
 
-The website applies these requirements to one consistent example: a fragile reclaimed window collected from a Basel materials depot and placed in a Zürich office. The client specifies loading access, a two-person handling request, packaging, a freight lift, an arrival window and building protection. The partner confirms feasibility and enters the price. Example dimensions, weight and item value are labelled as illustrative; the site makes no route-distance, transit-time or quoted-fare claim.
+The website serves the whole of Switzerland. Its planner starts with the user's own item and route. An optional, labelled example applies these requirements to a fragile reclaimed window collected from a Basel materials depot and placed in a Zürich office. The client specifies loading access, a two-person handling request, packaging, a freight lift, an arrival window and building protection. The partner confirms feasibility and enters or adjusts the price. Example dimensions, weight and item value are illustrative; the site makes no route-distance, transit-time or quoted-fare claim.
+
+The business model has two separate fees, as directed by the user: 8% deducted from the sold item transaction value, and 8% deducted from the logistics partner's final agreed delivery price after any accepted adjustments. Each fee uses its own transaction amount.
 
 ## Sources and implications
 

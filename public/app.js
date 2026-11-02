@@ -229,8 +229,8 @@ function resetPlanner() {
   $('.form-progress').hidden = false;
   updateCategory();
   $('#access-fields').hidden = true;
+  form.elements.namedItem('deliveryDate').min = form.elements.namedItem('pickupDate').min;
   goToStep(0);
-  fillExample(false);
 }
 
 if (form) {
@@ -251,7 +251,6 @@ if (form) {
   });
   form.elements.namedItem('service').addEventListener('change', event => { $('#access-fields').hidden = event.target.value === 'doorstep'; });
   if (['demo-window', 'demo-chair', 'basel-zurich-window'].includes(params.get('item'))) fillExample(false);
-  else if (!params.get('item')) fillExample(false);
 
   form.addEventListener('submit', async event => {
     event.preventDefault();

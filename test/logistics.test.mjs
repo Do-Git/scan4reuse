@@ -35,6 +35,24 @@ test('professional delivery options retain access and handling instructions and 
   }
 });
 
+test('the delivery fee follows the accepted adjusted price independently of the item value', () => {
+  const exchange = new DeliveryExchange();
+  exchange.setRequest({ ...request, declaredValue: 120 });
+  exchange.take();
+  const original = exchange.propose({ ...quote, transport: '800', handling: '150', extras: '50' }, currentDay);
+  assert.deepEqual(partnerTransactionAmounts(original.totalCents), { feeCents: 8000, partnerAmountCents: 92000 });
+  exchange.revise('Adjust the handling price and include packaging removal.');
+  const adjusted = exchange.propose({ ...quote, mode: 'adjusted', transport: '650', handling: '100', extras: '50', changes: 'Updated handling and transport price with packaging removal.' }, currentDay);
+  exchange.accept(adjusted.id, currentDay);
+  assert.equal(adjusted.totalCents, 80000);
+  assert.deepEqual(partnerTransactionAmounts(adjusted.totalCents), { feeCents: 6400, partnerAmountCents: 73600 });
+  assert.equal(exchange.request.declaredValue, 120);
+  const rows = partnerProposalSections(exchange.request, adjusted, exchange.stage).find(section => section.title === 'Logistics partner transaction fee').rows;
+  assert.match(rows.find(([label]) => label === 'Fee basis')[1], /after any client-approved adjustments/);
+  assert.match(rows.find(([label]) => label === 'Scan4Reuse fee · 8%')[1], /64\.00/);
+  assert.match(rows.find(([label]) => label === 'Separate item-sale fee')[1], /sold item transaction value/);
+});
+
 test('a partner must take a request for review before quoting and cannot silently change an as-requested quote', () => {
   const exchange = new DeliveryExchange();
   exchange.setRequest(request);

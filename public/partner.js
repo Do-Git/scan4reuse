@@ -49,7 +49,7 @@ function quoteSummary(quote, request) {
     prices.append(element('dt', label), element('dd', money(amount / 100)));
   }
   container.append(prices);
-  container.append(element('p', 'The 8% Scan4Reuse fee is paid by the logistics partner from this delivery total; it is not added to your quote.', 'exchange-note'));
+  container.append(element('p', 'Scan4Reuse deducts 8% from the logistics partner’s final agreed delivery price, including accepted adjustments. The separate item-sale fee is 8% of the sold item value, deducted from the sale proceeds.', 'exchange-note'));
   container.append(element('p', `VAT: ${{ included: 'included', excluded: 'excluded', confirm: 'to be confirmed' }[quote.taxBasis]}. Quote valid until ${quote.validUntil}.`));
   if (quote.crewEquipment) container.append(element('p', `Crew and equipment: ${quote.crewEquipment}`));
   container.append(element('strong', 'Included services and conditions'), element('p', quote.scope, 'proposal-scope'));
@@ -119,8 +119,8 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     $('#partner-proposal-status').textContent = stage === 'agreed' ? 'The client has accepted the scope and price in this example.' : 'The client can accept the proposal or ask for a revision.';
     if (proposal) {
       const { feeCents, partnerAmountCents } = partnerTransactionAmounts(proposal.totalCents);
-      for (const [label, amount] of [['Agreed delivery value', proposal.totalCents], ['Scan4Reuse fee · 8%', feeCents], ['Partner amount after fee', partnerAmountCents]]) {
-        partnerSummary.append(element('dt', label === 'Agreed delivery value' && stage !== 'agreed' ? 'Proposed delivery value' : label), element('dd', money(amount / 100)));
+      for (const [label, amount] of [[stage === 'agreed' ? 'Final agreed delivery price' : 'Proposed delivery price', proposal.totalCents], ['Delivery transaction fee · 8%', feeCents], ['Partner amount after fee', partnerAmountCents]]) {
+        partnerSummary.append(element('dt', label), element('dd', money(amount / 100)));
       }
     }
     $('#client-exchange-status').textContent = {

@@ -2,7 +2,7 @@
 
 **URL verificato:** https://scan4reuse-preview.vercel.app
 
-Apri il collegamento in un browser. Il sito segue l’esempio di una finestra recuperata da Basilea a un ufficio di Zurigo. La landing offre **Plan Basel → Zürich** per il modulo logistico, **Pricing** per i prezzi e i calcolatori, e **Delivery documents** per il workspace in inglese. Anche gli URL diretti https://scan4reuse-preview.vercel.app/pricing e https://scan4reuse-preview.vercel.app/upload sono stati verificati. Il brief e il preventivo del partner si scaricano come report PDF con lo stesso percorso.
+Apri il collegamento in un browser. Il sito presenta Scan4Reuse come piattaforma di riuso e logistica per tutta la Svizzera. La landing offre **Plan a delivery** per inserire il proprio oggetto e percorso, **Pricing** per le due commissioni dell’8% e i calcolatori, e **Delivery documents** per il workspace in inglese. Basilea → Zurigo rimane un esempio esplicitamente indicato. Gli URL diretti sono https://scan4reuse-preview.vercel.app/pricing e https://scan4reuse-preview.vercel.app/upload. Il brief e il preventivo del partner si scaricano come report PDF.
 
 Il progetto usa HTML, CSS e JavaScript, con un server HTTP nativo di Node.js. Non usa React, Next.js, Vite o un altro framework. I report PDF usano jsPDF e font inclusi negli asset locali; non serve un servizio PDF esterno. Serve Node.js 22 o successivo.
 
@@ -62,7 +62,7 @@ Usa il pacchetto generato, non l’intera cartella del repository. Non ci sono s
 
 ## Controlli eseguiti
 
-- 20 test passati, inclusi requisiti professionali, commissione partner dell’8% e ciclo di preventivo, revisione e accettazione.
+- 21 test passati, inclusi requisiti professionali, ricalcolo della commissione partner dell’8% sul prezzo finale modificato e ciclo di preventivo, revisione e accettazione.
 - Server Node e pacchetto statico verificati in Chromium.
 - Modulo adattivo, esportazione brief, upload/download/eliminazione e calcolatori verificati.
 - Navigazione mobile e layout controllati da 320 a 1440 px.

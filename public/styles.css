@@ -740,6 +740,13 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
 }
 
 /* Show the logistics partner's transaction fee before they submit a quote. */
+.transaction-fees { margin-bottom: 40px; scroll-margin-top: 110px; }
+.transaction-fees h2 { font-size: 34px; line-height: 1.25; letter-spacing: -1px; margin: 0 0 24px; }
+.transaction-fees-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.transaction-fees article { min-width: 0; padding: 26px; border: 1px solid #d8e4cc; border-radius: 10px; background: #edf3e5; overflow-wrap: anywhere; }
+.transaction-fees h3 { font-size: 25px; line-height: 1.35; letter-spacing: -.6px; margin: 14px 0; }
+.transaction-fees article p { font-size: 16px; line-height: 1.7; }
+.transaction-fees .fee-example { font-weight: 600; color: #345a3b; }
 .partner-fee-note { margin-block: 26px; padding: 22px; border: 1px solid #d8e4cc; border-radius: 10px; background: #edf3e5; }
 .partner-fee-note h3 { font-size: 23px; line-height: 1.35; letter-spacing: -.5px; margin: 0 0 15px; }
 .partner-fee-note p, .estimate-card>p { font-size: 16px; line-height: 1.7; }
@@ -754,4 +761,9 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
 .estimate-card .exchange-note { font-size: 14px; line-height: 1.7; }
 @media (max-width: 1000px) {
   .estimator-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .transaction-fees-grid { grid-template-columns: 1fr; }
+  .transaction-fees h2 { font-size: 28px; }
+  .transaction-fees article { padding: 22px; }
 }

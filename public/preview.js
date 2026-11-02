@@ -31,7 +31,7 @@ export function configurePreview(page) {
   }
 
   const description = document.querySelector('.demo-note p');
-  if (description) description.textContent = 'Customize the Basel-to-Zürich request, switch to the partner view to prepare a quote, then return to the client view to review it.';
+  if (description) description.textContent = 'Prepare a delivery request for locations across Switzerland, or load the labelled example. Switch to partner view to quote or adjust the price, then return to client view to review it.';
   const consent = document.querySelector('.consent-label>span');
   if (consent) {
     consent.replaceChildren(document.createTextNode('I understand this brief is prepared in my browser. No partner will be contacted automatically. '));

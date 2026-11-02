@@ -23,10 +23,10 @@ function json(response, status, data) {
 function safeName(header) {
   let name;
   try { name = decodeURIComponent(header || ''); }
-  catch { throw new ApiError(400, 'Il nome del file non è valido.'); }
+  catch { throw new ApiError(400, 'The filename is not valid.'); }
   name = name.replaceAll('\\', '/').split('/').pop().normalize('NFC').replace(/[\x00-\x1f\x7f]/g, '').trim();
   if (!name || name === '.' || name === '..' || Buffer.byteLength(name) > 240) {
-    throw new ApiError(400, 'Scegli un file con un nome valido (massimo 240 byte).');
+    throw new ApiError(400, 'Choose a valid filename (up to 240 bytes).');
   }
   return name;
 }
@@ -62,7 +62,7 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
       if (['POST', 'DELETE'].includes(request.method)) {
         const origin = request.headers.origin;
         if ((origin && new URL(origin).host !== request.headers.host) || request.headers['sec-fetch-site'] === 'cross-site') {
-          throw new ApiError(403, 'Richiesta da un altro sito non consentita.');
+          throw new ApiError(403, 'Requests from another site are not allowed.');
         }
       }
 
@@ -78,10 +78,10 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
       if (path === '/api/files' && request.method === 'POST') {
         const name = safeName(request.headers['x-file-name']);
         if (request.headers['content-type']?.split(';')[0].trim() !== 'application/octet-stream') {
-          throw new ApiError(415, 'Invia il file come application/octet-stream.');
+          throw new ApiError(415, 'Submit the file as application/octet-stream.');
         }
-        if (Number(request.headers['content-length']) > maxFileSize) throw new ApiError(413, 'Il file supera il limite consentito.');
-        if (activeUploads >= 6) throw new ApiError(429, 'Troppi caricamenti in corso. Riprova tra poco.');
+        if (Number(request.headers['content-length']) > maxFileSize) throw new ApiError(413, 'The file exceeds the permitted size.');
+        if (activeUploads >= 6) throw new ApiError(429, 'Too many uploads are in progress. Try again shortly.');
         activeUploads++;
         const id = randomUUID();
         const temp = join(dataDir, `${id}.part`);
@@ -93,12 +93,12 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
           let size = 0;
           for await (const chunk of request.iterator({ destroyOnReturn: false })) {
             size += chunk.length;
-            if (size > maxFileSize) throw new ApiError(413, 'Il file supera il limite consentito.');
+            if (size > maxFileSize) throw new ApiError(413, 'The file exceeds the permitted size.');
             await handle.writeFile(chunk);
           }
           await handle.close();
           handle = undefined;
-          if (!size) throw new ApiError(400, 'Il file è vuoto. Scegli un altro file.');
+          if (!size) throw new ApiError(400, 'The file is empty. Choose another file.');
           const rawType = request.headers['x-file-type'] || 'application/octet-stream';
           const type = /^[a-z0-9!#$&^_.+-]+\/[a-z0-9!#$&^_.+-]+$/i.test(rawType) && rawType.length <= 127 ? rawType.toLowerCase() : 'application/octet-stream';
           const metadata = { id, name, size, type, createdAt: new Date().toISOString() };
@@ -120,7 +120,7 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
       if (match && validId.test(match[1])) {
         const id = match[1];
         const file = files.get(id);
-        if (!file) throw new ApiError(404, 'Questo file non è più disponibile.');
+        if (!file) throw new ApiError(404, 'This file is no longer available.');
         if (request.method === 'GET' && match[2]) {
           const handle = await open(join(dataDir, `${id}.blob`), 'r');
           response.writeHead(200, {
@@ -144,8 +144,8 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
         }
       }
 
-      if (path.startsWith('/api/')) throw new ApiError(404, 'Risorsa non trovata.');
-      if (!['GET', 'HEAD'].includes(request.method)) throw new ApiError(405, 'Metodo non consentito.');
+      if (path.startsWith('/api/')) throw new ApiError(404, 'Resource not found.');
+      if (!['GET', 'HEAD'].includes(request.method)) throw new ApiError(405, 'Method not allowed.');
       const assets = {
         '/': 'index.html', '/index.html': 'index.html',
         '/pricing': 'pricing.html', '/pricing/': 'pricing.html', '/pricing.html': 'pricing.html',
@@ -166,7 +166,7 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
         '/assets/sdg-13.jpg': 'assets/sdg-13.jpg',
       };
       const asset = assets[path];
-      if (!asset) throw new ApiError(404, 'Pagina non trovata.');
+      if (!asset) throw new ApiError(404, 'Page not found.');
       const assetPath = join(publicDir, asset);
       const info = await stat(assetPath);
       const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.ttf': 'font/ttf', '.txt': 'text/plain; charset=utf-8' };
@@ -181,7 +181,7 @@ export async function createApp({ dataDir = resolve(process.env.UPLOAD_DIR || jo
       if (response.destroyed || response.headersSent) return;
       const status = error.status || (error.code === 'ENOENT' ? 404 : 500);
       if (status === 500) console.error(error);
-      json(response, status, { error: error.status ? error.message : status === 404 ? 'File non trovato.' : 'Non è stato possibile completare la richiesta. Riprova.' });
+      json(response, status, { error: error.status ? error.message : status === 404 ? 'File not found.' : 'The request could not be completed. Try again.' });
     }
   });
   server.requestTimeout = 300_000;

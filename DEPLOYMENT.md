@@ -2,7 +2,7 @@
 
 **URL verificato:** https://scan4reuse-preview.vercel.app
 
-Apri il collegamento in un browser. La landing offre **Plan a delivery** per il modulo logistico, **Pricing** per i prezzi e i calcolatori, e i collegamenti ai concept e al workspace. Anche gli URL diretti https://scan4reuse-preview.vercel.app/pricing e https://scan4reuse-preview.vercel.app/upload sono stati verificati.
+Apri il collegamento in un browser. Il sito segue l’esempio di una finestra recuperata da Basilea a un ufficio di Zurigo. La landing offre **Plan Basel → Zürich** per il modulo logistico, **Pricing** per i prezzi e i calcolatori, e **Delivery documents** per il workspace in inglese. Anche gli URL diretti https://scan4reuse-preview.vercel.app/pricing e https://scan4reuse-preview.vercel.app/upload sono stati verificati. Il brief e il preventivo del partner si scaricano come report PDF con lo stesso percorso.
 
 Il progetto usa HTML, CSS e JavaScript, con un server HTTP nativo di Node.js. Non usa React, Next.js, Vite o un altro framework. I report PDF usano jsPDF e font inclusi negli asset locali; non serve un servizio PDF esterno. Serve Node.js 22 o successivo.
 
@@ -42,10 +42,10 @@ La CLI ufficiale verificata è Vercel 65.8.0. L’opzione `--temporary` è stata
    npm exec --yes --package vercel@65.8.0 -- vercel login
    ```
 
-2. Pubblica **solo la cartella generata**, in un progetto di anteprima:
+2. Pubblica **solo la cartella generata**, aggiornando il progetto di anteprima esistente:
 
    ```bash
-   npm exec --yes --package vercel@65.8.0 -- vercel deploy .local/preview/site --yes --environment preview --project scan4reuse-preview --create-if-missing
+   npm exec --yes --package vercel@65.8.0 -- vercel deploy .local/preview/site --yes --prod --project scan4reuse-preview
    ```
 
 3. Al termine Vercel stampa l’URL HTTPS del deployment. Apri quell’URL nel browser; dalla landing puoi raggiungere Pricing e il planner. Non serve aprire il codice o usare un indirizzo localhost.

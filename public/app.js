@@ -1,6 +1,6 @@
 import { browserPreview, configurePreview, preparePreviewBrief } from './preview.js';
 import { describeDeliveryOptions, readDeliveryOptions } from './delivery-options.js';
-import { createPartnerWorkspace } from './partner.js';
+import { createPartnerWorkspace, exampleDeliveryRequest } from './partner.js';
 import { downloadDeliveryBriefPdf } from './pdf-report.js';
 
 configurePreview('site');
@@ -73,20 +73,27 @@ function loadExampleRequest(request) {
   completeRequest(request);
 }
 
-function fillExample() {
+function fillExample(focus = true) {
   if (!form) {
-    window.location.href = '/?item=demo-window#delivery';
+    window.location.href = '/?item=basel-zurich-window#delivery';
     return;
   }
-  exchange.showSide('client');
+  if (focus) exchange.showSide('client');
   if (form.hidden) resetPlanner();
-  const example = { listingId: 'demo-window', itemName: 'Reclaimed window frame', category: 'building-materials', quantity: 1, length: 12, width: 100, height: 140, weight: 18 };
-  for (const [name, value] of Object.entries(example)) form.elements.namedItem(name).value = value;
-  form.elements.namedItem('fragile').checked = true;
-  form.elements.namedItem('packaging').checked = true;
+  const example = exampleDeliveryRequest();
+  for (const field of form.elements) {
+    if (!field.name || ['contactName', 'email', 'consent'].includes(field.name) || !Object.hasOwn(example, field.name)) continue;
+    if (field.type === 'checkbox') field.checked = example[field.name] === true;
+    else field.value = example[field.name] ?? '';
+  }
+  if (selectedPlan === 'none') selectedPlan = 'logistics';
+  $('#selected-plan').hidden = false;
+  $('#selected-plan').textContent = planLabels[selectedPlan];
+  $('#access-fields').hidden = example.service === 'doorstep';
+  form.elements.namedItem('deliveryDate').min = example.pickupDate;
   updateCategory();
   goToStep(0);
-  form.elements.namedItem('itemName').focus({ preventScroll: true });
+  if (focus) form.elements.namedItem('itemName').focus({ preventScroll: true });
 }
 
 $('#use-demo-listing').addEventListener('click', () => {
@@ -219,6 +226,7 @@ function resetPlanner() {
   updateCategory();
   $('#access-fields').hidden = true;
   goToStep(0);
+  fillExample(false);
 }
 
 if (form) {
@@ -238,7 +246,8 @@ if (form) {
     updateCategory();
   });
   form.elements.namedItem('service').addEventListener('change', event => { $('#access-fields').hidden = event.target.value === 'doorstep'; });
-  if (['demo-window', 'demo-chair'].includes(params.get('item'))) fillExample();
+  if (['demo-window', 'demo-chair', 'basel-zurich-window'].includes(params.get('item'))) fillExample(false);
+  else if (!params.get('item')) fillExample(false);
 
   form.addEventListener('submit', async event => {
     event.preventDefault();

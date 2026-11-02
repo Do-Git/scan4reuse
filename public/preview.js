@@ -12,24 +12,26 @@ export function configurePreview(page) {
   note.className = 'preview-notice';
   note.setAttribute('role', 'note');
   note.textContent = page === 'upload'
-    ? 'Anteprima interattiva: i file restano in memoria nel browser e si svuotano al ricaricamento. Nessun file viene inviato al server.'
+    ? 'Example delivery documents stay in this browser until reload. Use sample files to explore the workspace.'
     : '';
   if (note.textContent) document.body.prepend(note);
 
   if (page === 'upload') {
+    const storageStatus = document.querySelector('.space-profile .online-dot');
+    if (storageStatus) storageStatus.setAttribute('aria-label', 'Files in this browser session');
     const footnote = document.querySelector('.upload-footnote>span:first-child');
-    if (footnote) footnote.textContent = 'I file restano in questo browser · fino a 200 MB per sessione.';
+    if (footnote) footnote.textContent = 'Files stay in this browser · up to 200 MB per session.';
     const help = document.querySelector('.help-notice p');
-    if (help) help.textContent = 'Questa anteprima conserva i file soltanto in memoria nel tuo browser. Puoi caricarli, scaricarli ed eliminarli; al ricaricamento vengono rimossi. Limite totale: 200 MB per sessione.';
+    if (help) help.textContent = 'Delivery documents in this preview stay in browser memory. You can add, download and remove them; reloading clears the files. Total limit: 200 MB per session.';
     const saved = document.querySelector('.help-steps li:nth-child(2) p');
-    if (saved) saved.textContent = 'I file selezionati vengono letti in memoria nel tuo browser. In questa anteprima non vengono caricati su un server e non restano dopo il ricaricamento.';
+    if (saved) saved.textContent = 'Selected files are kept in this browser session. Reloading clears this preview workspace; download the files you need before leaving.';
     const deletion = document.querySelector('#delete-dialog>p');
-    if (deletion?.lastChild) deletion.lastChild.textContent = ' verrà rimosso da questa anteprima.';
+    if (deletion?.lastChild) deletion.lastChild.textContent = ' will be removed from this preview.';
     return;
   }
 
   const description = document.querySelector('.demo-note p');
-  if (description) description.textContent = 'Explore both sides: customize a request, prepare a partner quote and review it as the client. This example does not contact a carrier.';
+  if (description) description.textContent = 'Customize the Basel-to-Zürich request, switch to the partner view to prepare a quote, then return to the client view to review it.';
   const consent = document.querySelector('.consent-label>span');
   if (consent) {
     consent.replaceChildren(document.createTextNode('I understand this brief is prepared in my browser. No partner will be contacted automatically. '));
@@ -68,12 +70,12 @@ export function listPreviewFiles() {
 }
 
 export async function addPreviewFile(file) {
-  if (!file || !file.size) throw new Error('Il file è vuoto. Scegli un altro file.');
-  if (file.size > MAX_FILE_SIZE) throw new Error('Il file supera il limite di 50 MB.');
+  if (!file || !file.size) throw new Error('The file is empty. Choose another file.');
+  if (file.size > MAX_FILE_SIZE) throw new Error('The file exceeds the 50 MB limit.');
   const buffer = await file.arrayBuffer();
   // Check after reading as well, so simultaneous files cannot exceed the limit.
   const used = [...files.values()].reduce((sum, entry) => sum + entry.metadata.size, 0);
-  if (used + buffer.byteLength > MAX_SESSION_SIZE) throw new Error('Questa anteprima può conservare fino a 200 MB. Rimuovi un file e riprova.');
+  if (used + buffer.byteLength > MAX_SESSION_SIZE) throw new Error('This preview can hold up to 200 MB. Remove a file and try again.');
   const metadata = { id: crypto.randomUUID(), name: file.name, size: file.size, type: file.type || 'application/octet-stream', createdAt: new Date().toISOString() };
   const blob = new Blob([buffer], { type: 'application/octet-stream' });
   files.set(metadata.id, { metadata, url: URL.createObjectURL(blob) });
@@ -86,7 +88,7 @@ export function previewDownloadUrl(id) {
 
 export function deletePreviewFile(id) {
   const entry = files.get(id);
-  if (!entry) throw new Error('Questo file non è più disponibile.');
+  if (!entry) throw new Error('This file is no longer available.');
   URL.revokeObjectURL(entry.url);
   files.delete(id);
   return { deleted: id };

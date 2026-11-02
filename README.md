@@ -1,6 +1,6 @@
 # Scan4Reuse
 
-An English-language landing page for a circular-logistics startup, built with Node.js and plain HTML, CSS and JavaScript. The main journey connects delivery clients and logistics partners, supported by scanning, marketplace, reporting and ESG content. PDF reports use a self-hosted renderer and embedded fonts. No web framework or package installation is required to run the application.
+An English-language circular-logistics website built around an illustrative delivery of a reclaimed window from Basel to a Zürich office. A client specifies collection, handling and placement requirements; a logistics partner reviews the request and proposes a price or changes. Scanning, marketplace, reporting and ESG content follow the same example. The site uses Node.js and plain HTML, CSS and JavaScript, with a self-hosted PDF renderer and embedded fonts. No web framework or package installation is required to run the application.
 
 ## Run
 
@@ -15,17 +15,17 @@ The server listens on `127.0.0.1:3000`. `npm run dev` enables automatic server r
 
 ## Pages
 
-- `/` — logistics-first startup landing page with the delivery planner near the core service; supporting iPhone, marketplace and report concepts; mission, vision, ESG, the five-person team and the Basel hackathon origin. Deck statistics and early interviews are integrated as expandable background context.
-- `/pricing` — the pitch-deck model: **CHF 5/m² for a professional reuse report** and **8% of total marketplace sales**, plus separately quoted logistics. Live calculators illustrate report costs, commissions and seller remainder. No subscription, payment or transaction is created.
-- `/upload` — the existing shared file-upload workspace, with uploads, search, filters, downloads and deletion. This earlier workspace currently uses Italian UI copy.
+- `/` — the Basel-to-Zürich delivery journey, client planner and partner quote workflow; supporting scanning, listing and report concepts; mission, ESG, the five-person team and the Basel hackathon origin.
+- `/pricing` — **CHF 5/m² for a professional reuse report** and **8% of total marketplace sales**, plus separately quoted logistics. The marketplace calculator starts with the example window's illustrative CHF 120 value. No subscription, payment or transaction is created.
+- `/upload` — an English-language delivery-document workspace for briefs, condition photographs and site-access documents, with uploads, search, filters, downloads and deletion.
 
 The origin story links to [Startup Weekend Basel](https://startupweekendbasel.ch/).
 
 ## Branding and content source
 
-The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-material use case, app mockups, sample reuse report and pricing model. These are integrated into the original logistics-startup concept, rather than presented as a sequence of pitch slides. The interface uses a calm green palette, clear service descriptions and a working delivery brief.
+The user-supplied **Scan4Resources.pdf** supplies the brand accents, building-material use case, app mockups, sample reuse report and pricing model. The interface uses a calm green palette, clear service descriptions and a working delivery brief, with copy and listing illustrations following the Basel-to-Zürich example.
 
-Product, construction-context and team images in `public/assets/` are extracted from that deck. The five founder photographs are the original embedded photos, not AI-generated replacements. The unused generated artwork from the initial concept is not included in the site.
+Product, construction-context and team images in `public/assets/` are extracted from the supplied PDF. The five founder photographs are the original embedded photos. The case listing is rendered with HTML and the existing window icon so that its item and route match the planner.
 
 The impact section connects Sustainable Development Goals 8, 9, 11, 12 and 13 to logistics through short descriptions and the official [United Nations goal icons](https://sdgs.un.org/goals). The five `sdg-*.jpg` assets are hosted locally; their originals are available at `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-NN.jpg`, with `NN` matching the two-digit goal number.
 
@@ -37,11 +37,13 @@ Team profiles preserve the user-confirmed photograph order and titles:
 4. Ivo Bosshard — Sustainability
 5. Domenico Dongiovanni — Business
 
-Construction-context figures and early interview feedback are attributed to the founding deck; they are not independently verified live metrics. The reuse report is visibly marked SAMPLE DATA. ESG content states goals, not verified carbon savings or certifications. No partner affiliations or endorsements are implied by the deck's references to other businesses.
+The Basel-to-Zürich journey, item specifications and CHF 120 value are illustrative. No route distance, transit guarantee or transport fare is invented. The reuse report is visibly marked SAMPLE DATA. ESG content states goals, not measured carbon savings or certifications. No partner affiliations or endorsements are implied.
 
 ## Client and logistics partner workflow
 
 The client customizes the delivery for a particular good. The three-step form collects dimensions, weight, handling service, collection readiness, packaging, site access, dates and time windows, equipment, final placement and contact details. Optional services cover assembly, temporary storage/phased delivery, unpacking, building protection, condition photos, signed handover and cover clarification. Architect and facility-manager roles are supported alongside buyers, sellers and businesses.
+
+`exampleDeliveryRequest()` in `public/partner.js` provides the shared Basel-to-Zürich case: one fragile reclaimed window, 12 × 100 × 140 cm and 18 kg, with a Basel loading bay and an occupied Zürich office. The client form preloads those requirements while leaving contact details empty and consent unchecked. The explicit partner example uses clearly labelled example contacts. Resetting the planner restores the case without retaining personal data or a previous quote.
 
 The logistics partner view uses the same request. A partner accepts it for review, then submits an itemised quote or explicitly proposes adjusted timing, a different service or another approach. The client can accept the example proposal or ask for a revision. Superseded and expired proposals cannot be accepted, and editing the request resets the quotation state. Both the request and proposal can be downloaded. Research informing the options is recorded in [LOGISTICS_RESEARCH.md](LOGISTICS_RESEARCH.md).
 
@@ -72,9 +74,11 @@ Use a single server instance per data directory. Preserve and back up the data d
 - `server.mjs` — HTTP routing, static pages and file storage.
 - `delivery.mjs` — validation and persistence of delivery requests.
 - `public/index.html`, `public/pricing.html`, `public/styles.css`, `public/app.js` — startup website and delivery planner.
-- `public/upload.html`, `public/upload.css`, `public/upload.js` — existing upload workspace.
-- `public/assets/`, `public/icons.svg` — deck images and locally served icons.
-- `test/server.test.mjs` — integration tests.
+- `public/partner.js`, `public/delivery-options.js` — shared case, professional requirements and quotation workflow.
+- `public/pdf-report.js`, `public/vendor/` — PDF report rendering and its pinned library.
+- `public/upload.html`, `public/upload.css`, `public/upload.js` — delivery-document workspace.
+- `public/assets/`, `public/icons.svg` — product and team images, SDG logos, fonts and locally served icons.
+- `test/server.test.mjs`, `test/logistics.test.mjs` — integration and quotation tests.
 
 ## Browser preview and deployment
 

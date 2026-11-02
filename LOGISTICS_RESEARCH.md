@@ -2,6 +2,8 @@
 
 The logistics flow has two sides: a client specifies the delivery for a particular good, and a logistics partner accepts the request for review, quotes it or proposes changes. The client reviews the scope and price before accepting. The deployed static preview demonstrates both roles in one browser session.
 
+The website applies these requirements to one consistent example: a fragile reclaimed window collected from a Basel materials depot and placed in a Zürich office. The client specifies loading access, a two-person handling request, packaging, a freight lift, an arrival window and building protection. The partner confirms feasibility and enters the price. Example dimensions, weight and item value are labelled as illustrative; the site makes no route-distance, transit-time or quoted-fare claim.
+
 ## Sources and implications
 
 | Source | Practical needs | Implemented in the request |

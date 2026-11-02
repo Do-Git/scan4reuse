@@ -30,7 +30,7 @@ function bytes(value) {
   if (!value) return '0 B';
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   const order = Math.min(Math.floor(Math.log(value) / Math.log(1024)), units.length - 1);
-  return `${new Intl.NumberFormat('it-IT', { maximumFractionDigits: order ? 1 : 0 }).format(value / 1024 ** order)} ${units[order]}`;
+  return `${new Intl.NumberFormat('en-CH', { maximumFractionDigits: order ? 1 : 0 }).format(value / 1024 ** order)} ${units[order]}`;
 }
 
 function category(file) {
@@ -52,11 +52,11 @@ async function api(url, options) {
     if (url === '/api/files' && !options?.method) return listPreviewFiles();
     const match = url.match(/^\/api\/files\/([^/]+)$/);
     if (match && options?.method === 'DELETE') return deletePreviewFile(match[1]);
-    throw new Error('Questa operazione non è disponibile nell’anteprima.');
+    throw new Error('This operation is not available in the preview.');
   }
   const response = await fetch(url, options);
   const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'La richiesta non è riuscita. Riprova.');
+  if (!response.ok) throw new Error(data.error || 'The request failed. Please try again.');
   return data;
 }
 
@@ -69,7 +69,7 @@ async function loadFiles() {
     state.maxFileSize = data.maxFileSize;
     state.loaded = true;
     state.loadFailed = false;
-    $('#size-hint').textContent = `Fino a ${bytes(state.maxFileSize)} per file`;
+    $('#size-hint').textContent = `Up to ${bytes(state.maxFileSize)} per file`;
   } catch {
     state.loadFailed = true;
   } finally {
@@ -82,12 +82,12 @@ function renderFiles() {
   const total = state.files.length;
   $('#nav-count').textContent = total;
   $('#file-count').textContent = total;
-  $('#storage-summary').textContent = `${total} file · ${bytes(state.files.reduce((sum, file) => sum + file.size, 0))} utilizzati`;
-  $('#archive-status').textContent = state.loadFailed ? 'Archivio non raggiungibile' : total ? (browserPreview ? 'File in memoria in questo browser' : 'Tutti i file salvati sul server') : 'Pronto per il tuo primo file';
+  $('#storage-summary').textContent = `${total} ${total === 1 ? "file" : "files"} · ${bytes(state.files.reduce((sum, file) => sum + file.size, 0))} used`;
+  $('#archive-status').textContent = state.loadFailed ? 'File list unavailable' : total ? (browserPreview ? 'Files in this browser session' : 'All files stored on this instance') : 'Ready for the first delivery file';
   $('#empty-state').hidden = state.loadFailed || !state.loaded || total > 0;
   $('#load-error').hidden = !state.loadFailed;
-  const filtered = state.files.filter(file => (state.filter === 'all' || category(file) === state.filter) && file.name.toLocaleLowerCase('it').includes(state.query.toLocaleLowerCase('it')));
-  filtered.sort((a, b) => state.sort === 'name' ? a.name.localeCompare(b.name, 'it') : state.sort === 'size' ? b.size - a.size : state.sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt) : b.createdAt.localeCompare(a.createdAt));
+  const filtered = state.files.filter(file => (state.filter === 'all' || category(file) === state.filter) && file.name.toLocaleLowerCase('en').includes(state.query.toLocaleLowerCase('en')));
+  filtered.sort((a, b) => state.sort === 'name' ? a.name.localeCompare(b.name, 'en') : state.sort === 'size' ? b.size - a.size : state.sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt) : b.createdAt.localeCompare(a.createdAt));
   $('#no-results').hidden = state.loadFailed || !total || filtered.length > 0;
   list.hidden = state.loadFailed || !filtered.length;
   list.classList.toggle('file-list-layout', state.view === 'list');
@@ -106,27 +106,27 @@ function fileCard(file) {
   const name = element('h3', 'file-name', file.name);
   name.title = file.name;
   const meta = element('div', 'file-meta');
-  const date = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short' }).format(new Date(file.createdAt));
+  const date = new Intl.DateTimeFormat('en-CH', { day: 'numeric', month: 'short' }).format(new Date(file.createdAt));
   meta.append(element('span', '', bytes(file.size)), element('span', '', '·'), element('span', '', date));
   details.append(name, meta);
   const actions = element('div', 'file-actions');
   const download = element('a', 'icon-button');
   download.href = browserPreview ? previewDownloadUrl(file.id) : `/api/files/${file.id}/download`;
   download.setAttribute('download', file.name);
-  download.setAttribute('aria-label', `Scarica ${file.name}`);
-  download.title = 'Scarica file';
+  download.setAttribute('aria-label', `Download ${file.name}`);
+  download.title = 'Download file';
   download.append(icon('download'));
   const remove = element('button', 'icon-button delete-button');
   remove.type = 'button';
-  remove.setAttribute('aria-label', `Elimina ${file.name}`);
-  remove.title = 'Elimina file';
+  remove.setAttribute('aria-label', `Remove ${file.name}`);
+  remove.title = 'Remove file';
   remove.append(icon('trash'));
   remove.addEventListener('click', () => {
     deleteTarget = file;
     $('#delete-file-name').textContent = file.name;
     $('#delete-error').hidden = true;
     $('#confirm-delete').disabled = false;
-    $('#confirm-delete').textContent = 'Elimina file';
+    $('#confirm-delete').textContent = 'Remove file';
     $('#delete-dialog').showModal();
   });
   actions.append(download, remove);
@@ -140,7 +140,7 @@ function addFiles(files) {
     const item = { id: crypto.randomUUID(), file, name: file.name, size: file.size, status: 'waiting', progress: 0, error: '', retryable: true };
     if (file.size > state.maxFileSize || !file.size) {
       item.status = 'error';
-      item.error = file.size ? `Supera il limite di ${bytes(state.maxFileSize)} per file.` : 'Il file è vuoto. Scegli un altro file.';
+      item.error = file.size ? `Exceeds the ${bytes(state.maxFileSize)} limit per file.` : 'The file is empty. Choose another file.';
       item.retryable = false;
       item.file = null;
     }
@@ -152,10 +152,10 @@ function addFiles(files) {
 
 function queueStatus(item) {
   switch (item.status) {
-    case 'waiting': return `${bytes(item.size)} · In attesa…`;
-    case 'uploading': return `${bytes(item.size)} · ${item.progress >= 100 ? 'Salvataggio…' : `${item.progress}% caricato`}`;
-    case 'done': return `${bytes(item.size)} · Caricato`;
-    case 'cancelled': return 'Caricamento annullato';
+    case 'waiting': return `${bytes(item.size)} · Waiting…`;
+    case 'uploading': return `${bytes(item.size)} · ${item.progress >= 100 ? 'Saving…' : `${item.progress}% uploaded`}`;
+    case 'done': return `${bytes(item.size)} · Added`;
+    case 'cancelled': return 'Upload cancelled';
     default: return item.error;
   }
 }
@@ -164,7 +164,7 @@ function renderQueue() {
   $('#queue-section').hidden = state.queue.length === 0;
   const done = state.queue.filter(item => item.status === 'done').length;
   const pending = state.queue.filter(item => ['waiting', 'uploading'].includes(item.status)).length;
-  $('#queue-summary').textContent = pending ? `${done} di ${state.queue.length} completati` : done ? `${done} completati` : '';
+  $('#queue-summary').textContent = pending ? `${done} of ${state.queue.length} complete` : done ? `${done} complete` : '';
   $('#clear-queue').hidden = !state.queue.some(item => ['done', 'cancelled', 'error'].includes(item.status));
   $('#upload-queue').replaceChildren(...state.queue.map(item => {
     const li = element('li', 'queue-item');
@@ -181,7 +181,7 @@ function renderQueue() {
       const progress = element('progress', 'queue-progress');
       progress.max = 100;
       progress.value = item.progress;
-      progress.setAttribute('aria-label', `Avanzamento ${item.name}`);
+      progress.setAttribute('aria-label', `Upload progress for ${item.name}`);
       info.append(progress);
       item.progressNode = progress;
     }
@@ -189,8 +189,8 @@ function renderQueue() {
     if (['waiting', 'uploading'].includes(item.status)) {
       const cancel = element('button', 'icon-button queue-action');
       cancel.type = 'button';
-      cancel.setAttribute('aria-label', `Annulla caricamento di ${item.name}`);
-      cancel.title = 'Annulla caricamento';
+      cancel.setAttribute('aria-label', `Cancel upload of ${item.name}`);
+      cancel.title = 'Cancel upload';
       cancel.append(icon('close'));
       cancel.addEventListener('click', () => {
         if (item.xhr) item.xhr.abort();
@@ -198,9 +198,9 @@ function renderQueue() {
       });
       li.append(cancel);
     } else if (item.status === 'error' && item.retryable) {
-      const retry = element('button', 'text-button queue-action', 'Riprova');
+      const retry = element('button', 'text-button queue-action', 'Try again');
       retry.type = 'button';
-      retry.setAttribute('aria-label', `Riprova caricamento di ${item.name}`);
+      retry.setAttribute('aria-label', `Retry upload of ${item.name}`);
       retry.addEventListener('click', () => { item.status = 'waiting'; item.progress = 0; renderQueue(); pumpQueue(); });
       li.append(retry);
     } else if (item.status === 'done') li.append(icon('check', 'queue-done'));
@@ -241,12 +241,12 @@ function upload(item) {
   xhr.addEventListener('load', () => {
     let data;
     try { data = JSON.parse(xhr.responseText); }
-    catch { return finish('error', 'Risposta del server non valida. Riprova.'); }
+    catch { return finish('error', 'The server response was invalid. Try again.'); }
     if (xhr.status === 201 && data.file) finish('done', '', data.file);
-    else finish('error', data.error || 'Il caricamento non è riuscito. Riprova.');
+    else finish('error', data.error || 'The upload failed. Try again.');
   });
-  xhr.addEventListener('error', () => finish('error', 'Connessione interrotta. Controlla la rete e riprova.'));
-  xhr.addEventListener('timeout', () => finish('error', 'Il server impiega troppo tempo. Riprova.'));
+  xhr.addEventListener('error', () => finish('error', 'Connection interrupted. Check the network and try again.'));
+  xhr.addEventListener('timeout', () => finish('error', 'The server took too long. Try again.'));
   xhr.addEventListener('abort', () => finish('cancelled'));
   xhr.send(item.file);
 }
@@ -263,7 +263,7 @@ function finishUpload(item, status, error = '', file) {
       state.loadFailed = false;
       $('#loading-state').hidden = true;
       renderFiles();
-      toast(browserPreview ? `“${file.name}” è pronto in questa anteprima.` : `“${file.name}” è nel tuo archivio.`);
+      toast(browserPreview ? `“${file.name}” is ready in this preview.` : `“${file.name}” is in the delivery workspace.`);
     } else if (status === 'cancelled') { item.file = null; loadFiles(); }
     renderQueue();
     pumpQueue();
@@ -341,21 +341,21 @@ $('#confirm-delete').addEventListener('click', async () => {
   if (!deleteTarget) return;
   const file = deleteTarget;
   $('#confirm-delete').disabled = true;
-  $('#confirm-delete').textContent = 'Eliminazione…';
+  $('#confirm-delete').textContent = 'Removing…';
   $('#delete-error').hidden = true;
   try {
     await api(`/api/files/${file.id}`, { method: 'DELETE' });
     state.files = state.files.filter(item => item.id !== file.id);
     $('#delete-dialog').close();
     renderFiles();
-    toast('File eliminato. Spazio a nuove idee.');
+    toast('File removed from the delivery workspace.');
     deleteTarget = null;
   } catch (error) {
     $('#delete-error').textContent = error.message;
     $('#delete-error').hidden = false;
   } finally {
     $('#confirm-delete').disabled = false;
-    $('#confirm-delete').textContent = 'Elimina file';
+    $('#confirm-delete').textContent = 'Remove file';
   }
 });
 

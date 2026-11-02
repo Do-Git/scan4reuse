@@ -10,16 +10,16 @@ const afterDays = days => {
 
 export function exampleDeliveryRequest() {
   const request = {
-    id: crypto.randomUUID(), reference: 'S4R-EXAMPLE-WINDOW', createdAt: new Date().toISOString(), status: 'example_request',
+    id: crypto.randomUUID(), reference: 'S4R-EXAMPLE-BASEL-ZURICH', createdAt: new Date().toISOString(), status: 'example_request',
     itemName: 'Reclaimed window frame', category: 'building-materials', quantity: 1, length: 12, width: 100, height: 140, weight: 18,
-    fragile: true, pickup: 'Lucerne, Switzerland', destination: 'Basel, Switzerland', pickupDate: afterDays(7), deliveryDate: afterDays(8),
+    fragile: true, pickup: 'Basel, Switzerland', destination: 'Zürich, Switzerland', pickupDate: afterDays(7), deliveryDate: afterDays(8),
     service: 'two-person', pickupFloor: 0, deliveryFloor: 2, pickupLift: false, deliveryLift: true, packaging: true, forklift: false,
     handlingUnit: 'loose', readiness: 'ready', scheduleFlexibility: 'fixed', pickupWindow: '09:00–11:00', deliveryWindow: '17:00–19:00',
-    pickupAccess: 'Loading bay at the materials store; call before arriving.', deliveryAccess: 'Occupied office; freight lift must be reserved.',
+    pickupAccess: 'Basel materials depot: use the loading bay and call the site contact before arriving.', deliveryAccess: 'Occupied office in Zürich: reserve the freight lift and protect the access route.',
     accessMeasurements: 'Freight lift: 140 × 220 × 210 cm; 1,000 kg capacity.', placement: 'Second-floor meeting room',
-    equipment: 'tail-lift', siteReference: 'Example facility team · bay B', siteProtection: true, conditionRecord: true, packagingRemoval: true,
+    equipment: 'tail-lift', declaredValue: 120, siteReference: 'Example Zürich facility team · receiving bay B', siteProtection: true, conditionRecord: true, packagingRemoval: true,
     notes: 'Protect the frame and glazing. The site contact signs the handover after checking condition.',
-    contactName: 'Example facility team', email: 'facility@example.com', requesterRole: 'facility-manager', consent: true, plan: 'logistics',
+    contactName: 'Example Zürich facility team', email: 'facility@example.com', requesterRole: 'facility-manager', consent: true, plan: 'logistics', listingId: 'example-basel-zurich-window',
   };
   return { ...request, ...readDeliveryOptions(request) };
 }

@@ -738,3 +738,20 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
   .case-listing-object svg { width: 58px; height: 72px; }
   .case-listing-route { gap: 12px; }
 }
+
+/* Show the logistics partner's transaction fee before they submit a quote. */
+.partner-fee-note { margin-block: 26px; padding: 22px; border: 1px solid #d8e4cc; border-radius: 10px; background: #edf3e5; }
+.partner-fee-note h3 { font-size: 23px; line-height: 1.35; letter-spacing: -.5px; margin: 0 0 15px; }
+.partner-fee-note p, .estimate-card>p { font-size: 16px; line-height: 1.7; }
+.partner-fee-note .inline-link { font-size: 16px; }
+.quote-partner-breakdown { margin-block: 0 12px; padding-top: 0; border-top: 0; }
+.quote-partner-breakdown output { font: inherit; }
+.estimator-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.estimate-card { min-width: 0; overflow-wrap: anywhere; }
+.partner-estimate { background: #e8f0de; border-color: #acc598; scroll-margin-top: 110px; }
+.partner-estimate .seller-net { flex-wrap: wrap; gap: 10px 16px; align-items: baseline; font-size: 16px; line-height: 1.6; }
+.partner-estimate .seller-net output { font-size: 24px; font-weight: 600; }
+.estimate-card .exchange-note { font-size: 14px; line-height: 1.7; }
+@media (max-width: 1000px) {
+  .estimator-grid { grid-template-columns: 1fr; }
+}

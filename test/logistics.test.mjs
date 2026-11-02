@@ -1,10 +1,28 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DeliveryExchange, readDeliveryOptions, validatePartnerQuote } from '../public/delivery-options.js';
+import { DeliveryExchange, partnerTransactionAmounts, readDeliveryOptions, validatePartnerQuote } from '../public/delivery-options.js';
+import { partnerProposalSections } from '../public/pdf-report.js';
 
 const request = { id: 'request-one', pickupDate: '2099-11-10', deliveryDate: '2099-11-11', service: 'room', deliveryWindow: '17:00–19:00', pickupAccess: 'Bay B' };
 const currentDay = '2099-11-01';
 const quote = { partnerName: 'Example logistics partner', mode: 'as-requested', transport: '180.10', handling: '50.20', extras: '20', taxBasis: 'included', validUntil: '2099-11-09', requirementsReviewed: true, scope: 'Two-person handling, protection and final placement.' };
+
+test('the 8% partner transaction fee rounds to cents and leaves the client quote total unchanged', () => {
+  for (const [totalCents, feeCents, partnerAmountCents] of [[0, 0, 0], [1, 0, 1], [6, 0, 6], [7, 1, 6], [30, 2, 28], [100000, 8000, 92000], [25030, 2002, 23028], [2999999997, 240000000, 2759999997]]) {
+    assert.deepEqual(partnerTransactionAmounts(totalCents), { feeCents, partnerAmountCents });
+    assert.equal(feeCents + partnerAmountCents, totalCents);
+  }
+  for (const invalid of [-1, 1.5, NaN, Infinity, '1000', null]) assert.throws(() => partnerTransactionAmounts(invalid));
+  const proposal = validatePartnerQuote({ ...quote, transport: '800', handling: '150', extras: '50' }, request, currentDay);
+  assert.equal(proposal.totalCents, 100000);
+  const sections = partnerProposalSections(request, proposal, 'quoted');
+  const price = sections.find(section => section.title === 'Itemised price');
+  const fee = sections.find(section => section.title === 'Logistics partner transaction fee');
+  assert.match(price.rows.find(([label]) => label === 'Total')[1], /1[’',\s]?000\.00/);
+  assert.match(fee.rows.find(([label]) => label === 'Scan4Reuse fee · 8%')[1], /80\.00/);
+  assert.match(fee.rows.find(([label]) => label === 'Partner amount after fee')[1], /920\.00/);
+  assert.match(fee.rows.find(([label]) => label === 'Fee paid by')[1], /logistics partner/);
+});
 
 test('professional delivery options retain access and handling instructions and reject malformed requests', () => {
   const options = readDeliveryOptions({ ...request, handlingUnit: 'crate', readiness: 'dismantling', declaredValue: '2500.50', pickupAccess: '  Bay B  ', deliveryAccess: 'Reserved lift', accessMeasurements: 'Lift 140 × 220 × 210 cm', placement: 'Room 204', siteReference: 'Gate booking ABC', equipment: 'tail-lift', assembly: true, insuranceQuote: true, status: 'booked' });

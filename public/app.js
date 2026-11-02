@@ -1,5 +1,5 @@
 import { browserPreview, configurePreview, preparePreviewBrief } from './preview.js';
-import { describeDeliveryOptions, readDeliveryOptions } from './delivery-options.js';
+import { describeDeliveryOptions, partnerTransactionAmounts, readDeliveryOptions } from './delivery-options.js';
 import { createPartnerWorkspace, exampleDeliveryRequest } from './partner.js';
 import { downloadDeliveryBriefPdf } from './pdf-report.js';
 
@@ -33,14 +33,18 @@ $$('dialog').forEach(dialog => dialog.addEventListener('click', event => {
 }));
 
 const currency = value => new Intl.NumberFormat('en-CH', { style: 'currency', currency: 'CHF' }).format(value);
-for (const id of ['report-area', 'sale-value']) {
+for (const id of ['report-area', 'sale-value', 'delivery-value']) {
   const input = $(`#${id}`);
   if (!input) continue;
   const calculate = () => {
     const valid = input.value !== '' && input.checkValidity();
     const value = valid ? Number(input.value) : null;
     if (id === 'report-area') $('#report-estimate').textContent = value === null ? 'Enter a valid area' : currency(value * 5);
-    else {
+    else if (id === 'delivery-value') {
+      const { feeCents, partnerAmountCents } = partnerTransactionAmounts(value === null ? 0 : Math.round(value * 100));
+      $('#partner-fee-estimate').textContent = value === null ? 'Enter a valid delivery value' : currency(feeCents / 100);
+      $('#partner-amount-estimate').textContent = value === null ? '—' : currency(partnerAmountCents / 100);
+    } else {
       // Work in cents so the displayed fee and remainder always add up.
       const total = value === null ? 0 : Math.round(value * 100);
       const commission = Math.round(total * 0.08);

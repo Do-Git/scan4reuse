@@ -62,7 +62,7 @@ Usa il pacchetto generato, non l’intera cartella del repository. Non ci sono s
 
 ## Controlli eseguiti
 
-- 19 test passati, inclusi requisiti professionali e ciclo di preventivo, revisione e accettazione.
+- 20 test passati, inclusi requisiti professionali, commissione partner dell’8% e ciclo di preventivo, revisione e accettazione.
 - Server Node e pacchetto statico verificati in Chromium.
 - Modulo adattivo, esportazione brief, upload/download/eliminazione e calcolatori verificati.
 - Navigazione mobile e layout controllati da 320 a 1440 px.

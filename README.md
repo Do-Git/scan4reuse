@@ -16,7 +16,7 @@ The server listens on `127.0.0.1:3000`. `npm run dev` enables automatic server r
 ## Pages
 
 - `/` — the Basel-to-Zürich delivery journey, client planner and partner quote workflow; supporting scanning, listing and report concepts; mission, ESG, the five-person team and the Basel hackathon origin.
-- `/pricing` — **CHF 5/m² for a professional reuse report** and **8% of total marketplace sales**, plus separately quoted logistics. The marketplace calculator starts with the example window's illustrative CHF 120 value. No subscription, payment or transaction is created.
+- `/pricing` — logistics partners pay **8% of each completed delivery transaction**, retaining 92% before their own costs and taxes. A dedicated calculator illustrates the fee and partner amount with CHF 1,000 (CHF 80 / CHF 920). Separate services remain **CHF 5/m² for a professional reuse report** and **8% of total marketplace sales**. The item-sale calculator starts with the example window's illustrative CHF 120 value. No subscription, payment or transaction is created.
 - `/upload` — an English-language delivery-document workspace for briefs, condition photographs and site-access documents, with uploads, search, filters, downloads and deletion.
 
 The origin story links to [Startup Weekend Basel](https://startupweekendbasel.ch/).
@@ -47,6 +47,8 @@ The client customizes the delivery for a particular good. The three-step form co
 
 The logistics partner view uses the same request. A partner accepts it for review, then submits an itemised quote or explicitly proposes adjusted timing, a different service or another approach. The client can accept the example proposal or ask for a revision. Superseded and expired proposals cannot be accepted, and editing the request resets the quotation state. Both the request and proposal can be downloaded. Research informing the options is recorded in [LOGISTICS_RESEARCH.md](LOGISTICS_RESEARCH.md).
 
+The partner quote form shows the client total, the 8% Scan4Reuse transaction fee and the partner amount after that fee. The fee applies to the agreed delivery total (transport, handling and added services); it comes from the partner's amount without adding another 8% to the client quote. The fee is charged on each completed delivery transaction, rather than on request review or quote preparation. Proposals and PDF reports retain the same breakdown. Amounts follow the quote's VAT basis; the partner amount is before the partner's own costs and taxes. These are pricing illustrations, with no payment processing in this prototype.
+
 `POST /api/delivery-requests` validates and saves a demo brief as a private-mode JSON file under `.local/uploads/delivery-requests/`. The browser receives a reference and downloads the complete brief as a branded A4 PDF report. Requests are not exposed through a public list/read API.
 
 Both brief and partner-proposal downloads produce actual PDF files, including selectable text, embedded fonts, section headings, automatic page breaks and page numbers. Proposal reports include the quoted scope, price, changes, acceptance status and original client requirements. Generation happens in the browser; the library and fonts load from the site's own assets when a report is downloaded. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the pinned library and font licenses.
@@ -59,7 +61,7 @@ Partner quotes and example agreements run in memory in the browser, including wh
 npm test
 ```
 
-The 19 tests cover upload/download integrity, persistence, deletion, size limits, interrupted uploads, static pages, data protection, professional delivery requirements, consent and invalid submissions. Quotation tests cover review before quoting, requested versus adjusted scope, exact-cent totals, revisions, explicit client acceptance, request edits, stale offers and expiry.
+The 20 tests cover upload/download integrity, persistence, deletion, size limits, interrupted uploads, static pages, data protection, professional delivery requirements, consent and invalid submissions. Quotation tests cover review before quoting, requested versus adjusted scope, exact-cent totals, 8% partner-fee rounding and PDF breakdown, revisions, explicit client acceptance, request edits, stale offers and expiry.
 
 Browser validation covers the client-to-partner request, quote, adjustment, revision, approval and download flow; request edits; keyboard tabs; calculators; uploads and mobile layouts at 320–1440px. The static preview makes no API mutations while using its example data. Verification assets are kept outside Git.
 

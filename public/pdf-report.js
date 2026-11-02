@@ -1,4 +1,4 @@
-import { equipmentNames, serviceNames } from './delivery-options.js';
+import { equipmentNames, partnerTransactionAmounts, serviceNames } from './delivery-options.js';
 
 const roleNames = { buyer: 'Buyer', seller: 'Seller', business: 'Business', architect: 'Architect / project team', 'facility-manager': 'Facility manager' };
 const categoryNames = { 'building-materials': 'Building components & materials', furniture: 'Furniture', homeware: 'Homeware & decor', electronics: 'Electronics', pallet: 'Pallet / business surplus', other: 'Other' };
@@ -50,6 +50,7 @@ export function deliveryBriefSections(request) {
 }
 
 export function partnerProposalSections(request, proposal, stage) {
+  const { feeCents, partnerAmountCents } = partnerTransactionAmounts(proposal.totalCents);
   const quoteSections = [
     { title: 'Partner proposal', rows: [
       ['Partner / company', proposal.partnerName], ['Request reference', request.reference], ['Proposal reference', proposal.id],
@@ -68,6 +69,13 @@ export function partnerProposalSections(request, proposal, stage) {
       ['Transport', money(proposal.transportCents / 100)], ['Handling', money(proposal.handlingCents / 100)],
       ['Added services', money(proposal.extrasCents / 100)], ['Total', money(proposal.totalCents / 100)],
       ['VAT basis', { included: 'VAT included', excluded: 'VAT excluded', confirm: 'To be confirmed' }[proposal.taxBasis]],
+    ] },
+    { title: 'Logistics partner transaction fee', rows: [
+      ['Fee paid by', 'The logistics partner, on each completed delivery transaction'],
+      ['Fee basis', '8% of the agreed delivery total: transport, handling and added services'],
+      ['Scan4Reuse fee · 8%', money(feeCents / 100)],
+      ['Partner amount after fee', `${money(partnerAmountCents / 100)} before the partner’s own costs and taxes`],
+      ['Client quote', 'The fee comes from the partner’s delivery total. No additional 8% is added to the client quote.'],
     ] },
   ];
   return [...quoteSections, ...deliveryBriefSections(request).map(section => ({ ...section, title: `Client requirements · ${section.title}` }))];

@@ -1,6 +1,12 @@
 export const serviceNames = { doorstep: 'Kerbside / doorstep', room: 'Room-of-choice placement', 'two-person': 'Two-person handling' };
 export const equipmentNames = { standard: 'Standard loading', 'tail-lift': 'Tail lift', forklift: 'Forklift', crane: 'Crane / specialist lifting', survey: 'Partner to assess equipment' };
 
+export function partnerTransactionAmounts(totalCents) {
+  if (!Number.isSafeInteger(totalCents) || totalCents < 0) throw new Error('Please provide a valid delivery transaction value in cents.');
+  const feeCents = Math.round(totalCents * 0.08);
+  return { feeCents, partnerAmountCents: totalCents - feeCents };
+}
+
 export function today() {
   return new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Zurich', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 }

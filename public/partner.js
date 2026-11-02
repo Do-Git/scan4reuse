@@ -1,4 +1,4 @@
-import { DeliveryExchange, readDeliveryOptions, serviceNames, today } from './delivery-options.js';
+import { DeliveryExchange, partnerTransactionAmounts, readDeliveryOptions, serviceNames, today } from './delivery-options.js';
 import { downloadPartnerProposalPdf } from './pdf-report.js';
 
 const money = amount => new Intl.NumberFormat('en-CH', { style: 'currency', currency: 'CHF' }).format(amount);
@@ -49,6 +49,7 @@ function quoteSummary(quote, request) {
     prices.append(element('dt', label), element('dd', money(amount / 100)));
   }
   container.append(prices);
+  container.append(element('p', 'The 8% Scan4Reuse fee is paid by the logistics partner from this delivery total; it is not added to your quote.', 'exchange-note'));
   container.append(element('p', `VAT: ${{ included: 'included', excluded: 'excluded', confirm: 'to be confirmed' }[quote.taxBasis]}. Quote valid until ${quote.validUntil}.`));
   if (quote.crewEquipment) container.append(element('p', `Crew and equipment: ${quote.crewEquipment}`));
   container.append(element('strong', 'Included services and conditions'), element('p', quote.scope, 'proposal-scope'));
@@ -84,6 +85,8 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     form.elements.proposedService.value = exchange.request.service;
     form.elements.proposedWindow.value = exchange.request.deliveryWindow || '';
     $('#quote-total').textContent = '—';
+    $('#quote-partner-fee').textContent = '—';
+    $('#quote-partner-amount').textContent = '—';
     $('#quote-adjustments').hidden = true;
     $('#quote-adjustments').disabled = true;
     $('#partner-quote-error').hidden = true;
@@ -96,6 +99,8 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     $('#partner-request').hidden = !request;
     $('#client-response').hidden = !request;
     $('#client-exchange-error').hidden = true;
+    const partnerSummary = $('#partner-transaction-summary');
+    partnerSummary.replaceChildren();
     if (!request) {
       $('#client-proposal-summary').replaceChildren();
       $('#client-quote-actions').hidden = true;
@@ -112,6 +117,12 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
     $('#partner-submitted').hidden = !['quoted', 'agreed'].includes(stage);
     $('#partner-submitted h3').textContent = stage === 'agreed' ? 'Scope and price agreed.' : 'Proposal ready for client review.';
     $('#partner-proposal-status').textContent = stage === 'agreed' ? 'The client has accepted the scope and price in this example.' : 'The client can accept the proposal or ask for a revision.';
+    if (proposal) {
+      const { feeCents, partnerAmountCents } = partnerTransactionAmounts(proposal.totalCents);
+      for (const [label, amount] of [['Agreed delivery value', proposal.totalCents], ['Scan4Reuse fee · 8%', feeCents], ['Partner amount after fee', partnerAmountCents]]) {
+        partnerSummary.append(element('dt', label === 'Agreed delivery value' && stage !== 'agreed' ? 'Proposed delivery value' : label), element('dd', money(amount / 100)));
+      }
+    }
     $('#client-exchange-status').textContent = {
       open: 'Your requirements are ready. Continue in partner view to review and quote this request.',
       reviewing: 'The partner is reviewing your delivery requirements and preparing a proposal.',
@@ -152,7 +163,11 @@ export function createPartnerWorkspace({ describeBrief, onExample }) {
   for (const name of ['transport', 'handling', 'extras']) form.elements.namedItem(name).addEventListener('input', () => {
     const fields = ['transport', 'handling', 'extras'].map(key => form.elements.namedItem(key));
     const valid = fields.every(field => field.value !== '' && field.checkValidity());
-    $('#quote-total').textContent = valid ? money(fields.reduce((sum, field) => sum + Math.round(Number(field.value) * 100), 0) / 100) : '—';
+    const totalCents = valid ? fields.reduce((sum, field) => sum + Math.round(Number(field.value) * 100), 0) : 0;
+    const { feeCents, partnerAmountCents } = partnerTransactionAmounts(totalCents);
+    $('#quote-total').textContent = valid ? money(totalCents / 100) : '—';
+    $('#quote-partner-fee').textContent = valid ? money(feeCents / 100) : '—';
+    $('#quote-partner-amount').textContent = valid ? money(partnerAmountCents / 100) : '—';
   });
   form.addEventListener('submit', event => {
     event.preventDefault();

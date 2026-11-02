@@ -779,3 +779,11 @@ input, select, textarea { border-radius: 5px; border-color: #dae5d0; background:
 .home-price-card .seller-net { flex-wrap: wrap; align-items: baseline; gap: 10px 16px; font-size: 16px; line-height: 1.6; }
 .home-price-card .seller-net output { font-size: 24px; font-weight: 600; }
 .home-pricing-footnote { font-size: 14px; line-height: 1.7; color: #5e7352; margin: 24px 0 0; }
+
+/* Keep task labels consistent and distinguish the main action on phones. */
+.mobile-menu { max-height: calc(100vh - 96px); max-height: calc(100svh - 96px); overflow-y: auto; overscroll-behavior: contain; }
+.mobile-menu a { min-height: 48px; text-align: left; }
+.mobile-menu .nav-primary-action { margin-top: 12px; padding: 14px 16px; justify-content: space-between; color: #fff; background: #214d37; border-radius: 7px; }
+.mobile-menu .nav-primary-action:hover { color: #fff; background: #173d29; }
+.home-faq { scroll-margin-top: 100px; border-top: 1px solid #dce5d3; padding-top: 56px; }
+.closing-note .button { flex-shrink: 0; }

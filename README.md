@@ -15,7 +15,7 @@ The server listens on `127.0.0.1:3000`. `npm run dev` enables automatic server r
 
 ## Pages
 
-- `/` — Switzerland-wide service positioning and an on-page pricing section after the service and supporting-tool sections, with independent delivery, report and sale calculators. Both transaction examples default to CHF 1,000, with an 8% fee of CHF 80 and CHF 920 remaining. The page also includes a client planner, partner quote workflow, supporting product concepts, ESG, the five-person team and the Basel hackathon origin.
+- `/` — introduction, how it works, services and supporting tools, pricing, impact, company/team, common questions and the client/partner delivery planner. The desktop and mobile menu uses the same order: **How it works → Services → Pricing → Impact → About us**, followed by **Plan a delivery** as the main action. Pricing stays below the introduction; both transaction calculators default to CHF 1,000, with an 8% fee of CHF 80 and CHF 920 remaining. See [STRUCTURE_RESEARCH.md](STRUCTURE_RESEARCH.md) for sources and rationale.
 - `/pricing` — two separate transaction fees: **8% of the actual sold item value**, deducted from sale proceeds, and **8% of the partner's final agreed delivery price**, deducted from the delivery amount after accepted price adjustments. Independent calculators show sale proceeds and partner amount after each fee. A professional reuse report remains **CHF 5/m²**. No subscription, payment or transaction is created.
 - `/upload` — an English-language delivery-document workspace for briefs, condition photographs and site-access documents, with uploads, search, filters, downloads and deletion.
 
